@@ -8,7 +8,6 @@ parser = argparse.ArgumentParser(
 parser.add_argument(
     "-b", "--barcodes", required=True, help="barcodes.tsv from cellranger"
 )
-parser.add_argument("-f", "--fasta", required=True, help="reference fasta file")
 parser.add_argument("-v", "--variants", required=True, help="vcf file used")
 parser.add_argument(
     "-t", "--threads", required=True, type=int, help="max threads to use"
@@ -116,9 +115,12 @@ def souporcell(args, ref_mtx, alt_mtx, final_vcf):
     cluster_file = args.out_dir + "/clusters_tmp.tsv"
     with open(cluster_file, "w") as log:
         with open(args.out_dir + "/clusters.err", "w") as err:
-            directory = os.path.dirname(os.path.realpath(__file__))
+            directory = os.path.dirname(
+                os.path.dirname(os.path.realpath(__file__))
+            )
             cmd = [
-                directory + "/souporcell/target/release/souporcell",
+                directory
+                + "/tools/souporcell/souporcell/target/release/souporcell",
                 "-k",
                 args.clusters,
                 "-a",
@@ -154,10 +156,13 @@ def doublets(args, ref_mtx, alt_mtx, cluster_file):
     doublet_file = args.out_dir + "/clusters.tsv"
     with open(doublet_file, "w") as dub:
         with open(args.out_dir + "/doublets.err", "w") as err:
-            directory = os.path.dirname(os.path.realpath(__file__))
+            directory = os.path.dirname(
+                os.path.dirname(os.path.realpath(__file__))
+            )
             subprocess.check_call(
                 [
-                    directory + "/troublet/target/release/troublet",
+                    directory
+                    + "/tools/souporcell/troublet/target/release/troublet",
                     "--alts",
                     alt_mtx,
                     "--refs",
@@ -174,10 +179,11 @@ def doublets(args, ref_mtx, alt_mtx, cluster_file):
 
 def consensus(args, ref_mtx, alt_mtx, doublet_file):
     print("running co inference of ambient RNA and cluster genotypes")
-    directory = os.path.dirname(os.path.realpath(__file__))
+    directory = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     subprocess.check_call(
         [
-            directory + "/consensus.py",
+            "python",
+            directory + "/tools/souporcell/consensus.py",
             "-c",
             doublet_file,
             "-a",
