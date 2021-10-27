@@ -2,6 +2,7 @@ import pystan
 import argparse
 import vcf
 
+
 parser = argparse.ArgumentParser(
     description="consensus genotype calling and ambient RNA estimation"
 )

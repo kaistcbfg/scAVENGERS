@@ -29,8 +29,8 @@ rule make_matrix:
         barcode = config["DATA"]["BARCODES"],
         vcf = config["DATA"]["RESULT_PATH"] + "variants.vcf"
     output:
-        ref = config["DATA"]["RESULT_PATH"] + "ref_temp.mtx",
-        alt = config["DATA"]["RESULT_PATH"] + "alt_temp.mtx"
+        ref = config["DATA"]["RESULT_PATH"] + "ref.mtx",
+        alt = config["DATA"]["RESULT_PATH"] + "alt.mtx"
     shell:
         """tools/vartrix_linux \
         -b {input.bam} -v {input.vcf} --fasta {input.genome} \
@@ -38,25 +38,6 @@ rule make_matrix:
         --out-matrix {output.alt} --ref-matrix {output.ref} """
         + config["SETTINGS"]["vartrix"]
 
-
-rule filter_variants:
-    input:
-        ref = config["DATA"]["RESULT_PATH"] + "ref_temp.mtx",
-        alt = config["DATA"]["RESULT_PATH"] + "alt_temp.mtx"
-    output:
-        ref = config["DATA"]["RESULT_PATH"] + "ref.mtx",
-        alt = config["DATA"]["RESULT_PATH"] + "alt.mtx"
-    params:
-        min_p = str(min(config["SETTINGS"]["prevalence"])),
-        max_p = str(max(config["SETTINGS"]["prevalence"]))
-    shell:
-        """python src/filter_variants_by_prevalence.py \
-        --ref_in {input.ref} \
-        --alt_in {input.alt} \
-        --min_p {params.min_p} \
-        --max_p {params.max_p} \
-        --ref_out {output.ref} \
-        --alt_out {output.alt}"""
 
 rule make_clusters:
     input:
@@ -70,8 +51,6 @@ rule make_clusters:
         out_dir = config["DATA"]["RESULT_PATH"]
     shell:
         """python src/run_souporcell.py \
-        -r {input.ref} \
-        -a {input.alt} \
         -b {input.barcode} \
         -v {input.vcf} \
         -o {params.out_dir} """

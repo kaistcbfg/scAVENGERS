@@ -1,0 +1,8 @@
+.snakemake
+data
+lab
+test*
+snakejob.*
+*.pbs
+.vscode
+.ipynb_checkpoints
