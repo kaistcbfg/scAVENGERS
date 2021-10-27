@@ -1,0 +1,1 @@
+/home/rotate/hansb/scATACseq_cluster/tools/souporcell/souporcell/target/release/souporcell: /home/rotate/hansb/scATACseq_cluster/tools/souporcell/souporcell/src/main.rs /home/rotate/hansb/scATACseq_cluster/tools/souporcell/souporcell/src/params.yml
