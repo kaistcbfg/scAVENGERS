@@ -1,6 +1,6 @@
 DATA:
   RESULT_PATH:
-    /home/rotate/hansb/scATACseq_cluster/data/result4/
+    /home/rotate/hansb/scATACseq_cluster/data/result5_qual_threshold/
   GENOME:
     /home/ambrosio/reference/refdata-cellranger-atac-hg19-1.2.0/fasta/genome.fa
   ALIGNMENTS:
@@ -9,11 +9,11 @@ DATA:
     /home/rotate/hansb/scATACseq_cluster/test_demux/all.unique.barcode.txt
 
 SETTINGS:
-  minimap:
-    --ax splice --t 8 --G50k --k 21 --w 11 --sr --A2 --B8 --O12,32 --E2,1 --r200 --p.5 --N20 --f1000,5000 --n2 --m20 --s40 --g2000 --2K50 --secondary=no
   freebayes:
-    -iXu -C 2 -q 36 -n 3 -E 1 -m 30 --min-coverage 20 --pooled-continuous
+    -iXu -C 2 -q 20 -n 3 -E 1 -m 30 --min-coverage 20 --pooled-continuous
+  bcftools:
+    -e "QUAL < 100"
   vartrix:
-    --mapq 30 --scoring-method coverage --threads 8
+    --mapq 20 --scoring-method coverage --threads 8
   souporcell:
     -k 4 -t 8

@@ -6,3 +6,6 @@ snakejob.*
 *.pbs
 .vscode
 .ipynb_checkpoints
+test_demultiplexing
+test_demux
+test_demux2

@@ -147,7 +147,7 @@ def souporcell(args, ref_mtx, alt_mtx, final_vcf):
                     )
             print(" ".join(cmd))
             subprocess.check_call(cmd, stdout=log, stderr=err)
-    subprocess.check_call(["touch", args.out_dir + "/clustering.done"])
+    subprocess.check_call(["touch", args.out_dir + "clustering.done"])
     return cluster_file
 
 
@@ -173,7 +173,7 @@ def doublets(args, ref_mtx, alt_mtx, cluster_file):
                 stdout=dub,
                 stderr=err,
             )
-    subprocess.check_call(["touch", args.out_dir + "/troublet.done"])
+    subprocess.check_call(["touch", args.out_dir + "troublet.done"])
     return doublet_file
 
 
@@ -195,28 +195,28 @@ def consensus(args, ref_mtx, alt_mtx, doublet_file):
             "--output_dir",
             args.out_dir,
             "--soup_out",
-            args.out_dir + "/ambient_rna.txt",
+            args.out_dir + "ambient_rna.txt",
             "--vcf_out",
-            args.out_dir + "/cluster_genotypes.vcf",
+            args.out_dir + "cluster_genotypes.vcf",
             "--vcf",
             args.variants,
         ]
     )
-    subprocess.check_call(["touch", args.out_dir + "/consensus.done"])
+    subprocess.check_call(["touch", args.out_dir + "consensus.done"])
 
 
 #### MAIN RUN SCRIPT
-ref_mtx = args.out_dir + "/ref.mtx"
-alt_mtx = args.out_dir + "/alt.mtx"
+if not args.out_dir.endswith("/"):
+    args.out_dir += "/"
+ref_mtx = args.out_dir + "ref.mtx"
+alt_mtx = args.out_dir + "alt.mtx"
 if not (os.path.exists(args.out_dir + "/clustering.done")):
     souporcell(args, ref_mtx, alt_mtx, args.variants)
 cluster_file = args.out_dir + "/clusters_tmp.tsv"
 if not (os.path.exists(args.out_dir + "/troublet.done")):
     doublets(args, ref_mtx, alt_mtx, cluster_file)
 doublet_file = args.out_dir + "/clusters.tsv"
-if not (os.path.exists(args.out_dir + "/consensus.done")):
-    consensus(args, ref_mtx, alt_mtx, doublet_file)
+# if not (os.path.exists(args.out_dir + "/consensus.done")):
+#     consensus(args, ref_mtx, alt_mtx, doublet_file)
 print("done")
-
-#### END MAIN RUN SCRIPT
 
