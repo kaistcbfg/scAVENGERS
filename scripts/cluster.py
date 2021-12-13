@@ -4,10 +4,8 @@ from time import time
 import numpy as np
 from scipy.io import mmread
 from scipy.stats import hypergeom, poisson
-from numba import jit
+from numba import jit, prange, config, set_num_threads, get_num_threads
 import pandas as pd
-from joblib import Parallel, delayed, cpu_count
-from tqdm import tqdm
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -111,6 +109,7 @@ def get_log_likelihood(
     return log_likelihood
 
 
+@jit(nopython=True, parallel=True, nogil=True, cache=True, fastmath=True)
 def get_log_likelihood_matrix(
     ref_barcode_matrix,
     alt_barcode_matrix,
@@ -118,36 +117,28 @@ def get_log_likelihood_matrix(
     priors,
     alt_count_pmf,
     poisson_pmf,
-    n_jobs,
 ):
-    n_clusters = eff_count_matrix.shape[0]
-    n_barcodes, n_variants = ref_barcode_matrix.shape
-    iter = zip(
-        ref_barcode_matrix.data,
-        alt_barcode_matrix.data,
-        ref_barcode_matrix.rows,
-    )
+    n_clusters, n_variants = eff_count_matrix.shape
+    n_barcodes = len(ref_barcode_matrix[1])
+    log_likelihood_matrix = np.zeros((n_barcodes, n_clusters))
+    ref_matrix_data, nz_indptr, total_nz_indices = ref_barcode_matrix
+    alt_matrix_data = alt_barcode_matrix[0]
 
-    log_likelihoods = Parallel(n_jobs=n_jobs)(
-        delayed(get_log_likelihood)(
-            ref_counts=np.fromiter(ref_counts, np.int8, len(ref_counts)),
-            alt_counts=np.fromiter(alt_counts, np.int8, len(alt_counts)),
-            eff_counts=eff_counts[indices],
-            n_variants=n_variants,
-            alt_count_pmf=alt_count_pmf,
-            poisson_pmf=poisson_pmf,
-        )
-        for ref_counts, alt_counts, indices in iter
-        for eff_counts in eff_count_matrix
-    )
-
-    log_likelihood_matrix = np.fromiter(
-        log_likelihoods, np.float64, n_barcodes * n_clusters
-    )
-    log_likelihood_matrix = log_likelihood_matrix.reshape(
-        n_barcodes, n_clusters
-    )
-    log_likelihood_matrix += np.log(priors)
+    for idx1 in prange(n_barcodes):
+        for idx2 in prange(n_clusters):
+            ref_counts = ref_matrix_data[nz_indptr[idx1] : nz_indptr[idx1 + 1]]
+            alt_counts = alt_matrix_data[nz_indptr[idx1] : nz_indptr[idx1 + 1]]
+            nz_indices = total_nz_indices[nz_indptr[idx1] : nz_indptr[idx1 + 1]]
+            eff_counts = eff_count_matrix[idx2][nz_indices]
+            log_likelihood_matrix[idx1, idx2] += get_log_likelihood(
+                ref_counts=ref_counts,
+                alt_counts=alt_counts,
+                eff_counts=eff_counts,
+                n_variants=n_variants,
+                alt_count_pmf=alt_count_pmf,
+                poisson_pmf=poisson_pmf,
+            )
+            log_likelihood_matrix[idx1, idx2] += priors[idx2]
 
     return log_likelihood_matrix
 
@@ -214,6 +205,7 @@ def update_eff_count(
     return np.argmax(expected_log_likelihoods)
 
 
+@jit(nopython=True, parallel=True, nogil=True, cache=True, fastmath=True)
 def update_eff_count_matrix(
     ref_loci_matrix,
     alt_loci_matrix,
@@ -221,26 +213,26 @@ def update_eff_count_matrix(
     posterior_sums,
     alt_count_pmf,
     poisson_pmf,
-    n_jobs,
 ):
     n_clusters = posterior_matrix.shape[0]
-    n_variants = ref_loci_matrix.shape[0]
-    iter = zip(ref_loci_matrix.data, alt_loci_matrix.data, ref_loci_matrix.rows)
+    n_variants = len(ref_loci_matrix[1])
+    eff_count_matrix = np.zeros((n_variants, n_clusters), dtype=np.int8)
+    ref_matrix_data, nz_indptr, total_nz_indices = ref_loci_matrix
+    alt_matrix_data = alt_loci_matrix[0]
 
-    eff_counts = Parallel(n_jobs=n_jobs)(
-        delayed(update_eff_count)(
-            ref_counts=np.fromiter(ref_counts, np.int8, len(ref_counts)),
-            alt_counts=np.fromiter(alt_counts, np.int8, len(alt_counts)),
-            posteriors=posteriors[indices],
-            posterior_sum=posterior_sum,
-            alt_count_pmf=alt_count_pmf,
-            poisson_pmf=poisson_pmf,
-        )
-        for ref_counts, alt_counts, indices in iter
-        for posteriors, posterior_sum in zip(posterior_matrix, posterior_sums)
-    )
-    eff_count_matrix = np.fromiter(eff_counts, np.int8, n_variants * n_clusters)
-    eff_count_matrix = eff_count_matrix.reshape(n_variants, n_clusters)
+    for idx1 in prange(n_variants):
+        for idx2 in prange(n_clusters):
+            ref_counts = ref_matrix_data[nz_indptr[idx1] : nz_indptr[idx1 + 1]]
+            alt_counts = alt_matrix_data[nz_indptr[idx1] : nz_indptr[idx1 + 1]]
+            nz_indices = total_nz_indices[nz_indptr[idx1] : nz_indptr[idx1 + 1]]
+            eff_count_matrix[idx1, idx2] = update_eff_count(
+                ref_counts=ref_counts,
+                alt_counts=alt_counts,
+                posteriors=posterior_matrix[idx2][nz_indices],
+                posterior_sum=posterior_sums[idx2],
+                alt_count_pmf=alt_count_pmf,
+                poisson_pmf=poisson_pmf,
+            )
 
     return eff_count_matrix.T
 
@@ -255,12 +247,31 @@ def perform_daem(
     stop_criterion,
     alt_count_pmf,
     poisson_pmf,
-    n_jobs,
 ):
-    ref_loci_matrix = ref_matrix.tolil()
-    ref_barcode_matrix = ref_loci_matrix.transpose().tolil()
-    alt_loci_matrix = alt_matrix.tolil()
-    alt_barcode_matrix = alt_loci_matrix.transpose().tolil()
+    ref_loci_matrix = ref_matrix.tocsr()
+    ref_loci_matrix = (
+        ref_loci_matrix.data,
+        ref_loci_matrix.indptr,
+        ref_loci_matrix.indices,
+    )
+    ref_barcode_matrix = ref_matrix.tocsc().transpose()
+    ref_barcode_matrix = (
+        ref_barcode_matrix.data,
+        ref_barcode_matrix.indptr,
+        ref_barcode_matrix.indices,
+    )
+    alt_loci_matrix = alt_matrix.tocsr()
+    alt_loci_matrix = (
+        alt_loci_matrix.data,
+        alt_loci_matrix.indptr,
+        alt_loci_matrix.indices,
+    )
+    alt_barcode_matrix = alt_matrix.tocsc().transpose()
+    alt_barcode_matrix = (
+        alt_barcode_matrix.data,
+        alt_barcode_matrix.indptr,
+        alt_barcode_matrix.indices,
+    )
 
     prev_total_log_likelihood = 1
     posterior_matrix = None
@@ -273,7 +284,6 @@ def perform_daem(
             priors,
             alt_count_pmf,
             poisson_pmf,
-            n_jobs,
         )
         posterior_matrix = get_posterior_matrix(
             log_likelihood_matrix, temperature
@@ -297,12 +307,11 @@ def perform_daem(
             posterior_sums,
             alt_count_pmf,
             poisson_pmf,
-            n_jobs,
         )
         prev_total_log_likelihood = total_log_likelihood
     elapsed_time = time() - t
     print(f"{elapsed_time} seconds elapsed for {iter + 1} iterations")
-    print(f"{elapsed_time / (iter + 1)} s/it")
+    print(f"average {elapsed_time / (iter + 1)} s/it")
 
     if abs(total_log_likelihood - prev_total_log_likelihood) > stop_criterion:
         print("WARNING: The expected likelihood did not converge.")
@@ -312,11 +321,13 @@ def perform_daem(
 
 def main():
     # setting number of threads
-    if args.threads <= cpu_count():
+    config.THREADING_LAYER = "tbb"
+    if args.threads <= get_num_threads():
+        set_num_threads(args.threads)
         logging.info(f"{args.threads} cores used")
     else:
         raise ValueError(
-            f"Not enough cores. {cpu_count()} cores available in maximum."
+            f"Not enough cores. {get_num_threads()} cores available in maximum."
         )
 
     # import count matrices
@@ -337,9 +348,9 @@ def main():
 
     # get priors
     if args.priors is None:
-        priors = np.repeat(1 / args.clusters, args.clusters)
+        args.priors = np.repeat(1 / args.clusters, args.clusters)
     elif len(args.priors) == args.clusters:
-        priors = np.array(args.priors) / sum(args.priors)
+        args.priors = np.array(args.priors) / sum(args.priors)
     else:
         raise ValueError(
             "Number of priors must equal to the number of clusters."
@@ -361,16 +372,15 @@ def main():
 
     # get MLEs and likelihoods
     mle_matrix, max_likelihood_matrix = perform_daem(
-        ref_matrix,
-        alt_matrix,
-        eff_count_matrix,
-        init_temperature,
-        priors,
-        args.max_iter,
-        args.stop_criterion,
-        alt_count_pmf,
-        poisson_pmf,
-        args.threads,
+        ref_matrix=ref_matrix,
+        alt_matrix=alt_matrix,
+        eff_count_matrix=eff_count_matrix,
+        temperature=init_temperature,
+        priors=args.priors,
+        max_iter=args.max_iter,
+        stop_criterion=args.stop_criterion,
+        alt_count_pmf=alt_count_pmf,
+        poisson_pmf=poisson_pmf,
     )
     logging.info("Calculating likelihoods done")
 
