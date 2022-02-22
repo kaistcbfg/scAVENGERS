@@ -1,10 +1,9 @@
-#!/user/bin/env/python3
+#!/usr/bin/env python
 
 import os
 import sys
 import subprocess
 import argparse
-from scripts.cluster import cluster
 
 
 parser = argparse.ArgumentParser()
@@ -20,7 +19,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "-b",
-    "--barcode",
+    "--barcodes",
     required=True,
     type=str,
     help="line-seperated list of barcode sequences",
@@ -47,18 +46,15 @@ parser.add_argument(
 )
 parser.add_argument(
     "--err_rate",
-    default=0.01,
+    default=0.001,
     type=float,
     help="rate of erraneous variant assignment on a cell barcode",
 )
 parser.add_argument(
-    "--doublet_threshold",
+    "--doublet_rate",
     default=0.2,
     type=float,
     help="Maximum difference of normalized likelihood to detect doublets",
-)
-parser.add_argument(
-    "--mapq", default=30, type=float, help="Minimum mapping quality"
 )
 parser.add_argument(
     "--varq", default=100, type=float, help="Minimum variant quality"
@@ -91,6 +87,8 @@ parser.add_argument(
 args = parser.parse_args()
 args.bam = os.path.abspath(args.bam)
 args.fasta = os.path.abspath(args.fasta)
+if not os.path.exists(args.output):
+    os.mkdir(args.output)
 args.output = os.path.abspath(args.output)
 
 # call variants with quality filter
@@ -99,38 +97,23 @@ if os.path.exists(f"{args.output}/variants.vcf.gz") or args.vcf is not None:
 else:
     try:
         cmd = (
-            "freebayes-parallel"
+            f"freebayes-parallel "
             f"<(fasta_generate_regions.py {args.fasta}.fai 100000) {args.threads} "
-            f"-f {args.fasta} -iXu -C 2 -q 30 -n 3 -E 1 -m {args.mapq} "
-            f"--min-coverage 20 --pooled-continuous {args.bam} | "
+            f"-f {args.fasta} -iXu -C 2 -q 30 -n 3 -E 1 -m 30 "
+            f"--min-coverage 20 --pooled-continuous --skip-coverage 100000 {args.bam} | "
             f'vcffilter -f "QUAL > {args.varq}" | '
             f"bgzip > {args.output}/variants.vcf.gz"
         )
         proc = subprocess.run(
-            cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True,
+            cmd, stdout=subprocess.PIPE, shell=True, executable="/bin/bash"
         )
-        print(proc.stdout().decode("UTF-8"))
+        print(proc.stdout.decode())
 
-    except:
+    except Exception as e:
+        print(e)
         if os.path.exists(f"{args.output}/variants.vcf.gz"):
-            print("removing gzvcf file because it may be corrupted...")
+            print("removing vcf file because it may be corrupted...")
             os.remove(f"{args.output}/variants.vcf.gz")
-        sys.exit()
-
-# make vcf index file
-if os.path.exists(f"{args.output}/variants.vcf.gz.tbi") or args.vcf is not None:
-    pass
-else:
-    try:
-        cmd = f"tabix {args.output}/variants.vcf.gz"
-        proc = subprocess.run(
-            cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True
-        )
-        print(proc.stdout().decode("UTF-8"))
-    except:
-        if os.path.exists(f"{args.output}/variants.vcf.gz.tbi"):
-            print("removing vcf index file because it may be corrupted...")
-            os.remove(f"{args.output}/variants.vcf.gz.tbi")
         sys.exit()
 
 # run vartrix
@@ -143,21 +126,23 @@ if (
     pass
 else:
     args.vcf = (
-        args.vcf if f"{args.output}/variants.vcf.gz" is None else args.vcf
+        f"{args.output}/variants.vcf.gz" if args.vcf is None else args.vcf
     )
     try:
         cmd = (
             f"vartrix -b {args.bam} -v {args.vcf} --fasta {args.fasta} "
-            f"-c {args.barcode} "
+            f"-c {args.barcodes} "
             f"--out-matrix {args.output}/alt.mtx "
             f"--ref-matrix {args.output}/ref.mtx "
-            f"--mapq 30 --scoring-method coverage --threads {args.threads}"
+            f"--mapq 30 --scoring-method coverage "
+            f"--threads {args.threads}"
         )
         proc = subprocess.run(
-            cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True,
+            cmd, stdout=subprocess.PIPE, shell=True, executable="/bin/bash",
         )
-        print(proc.stdout().decode("utf-8"))
-    except:
+        print(proc.stdout.decode())
+    except Exception as e:
+        print(e)
         if os.path.exists(f"{args.output}/ref.mtx"):
             print("removing reference mtx file because it may be corrupted...")
             os.remove(f"{args.output}/ref.mtx")
@@ -169,22 +154,76 @@ else:
         sys.exit()
 
 # cluster cell barcodes by genotype
-if os.path.exists(f"{args.output}/results.tsv") and os.path.exists(
-    f"{args.output}/genotypes.tsv"
-):
+if os.path.exists(f"{args.output}/clusters_tmp.tsv"):
     pass
 else:
-    args.vcf = (
-        args.vcf if f"{args.output}/variants.vcf.gz" is None else args.vcf
-    )
-    args.ref = args.ref if f"{args.output}/ref.mtx" is None else args.ref
-    args.alt = args.alt if f"{args.output}/alt.mtx" is None else args.alt
+    args.ref = f"{args.output}/ref.mtx" if args.ref is None else args.ref
+    args.alt = f"{args.output}/alt.mtx" if args.alt is None else args.alt
     try:
-        cluster(args)
-    except:
-        if os.path.exists(f"{args.output}/results.tsv"):
+        directory = os.path.dirname(os.path.abspath(__file__))
+        prior_cmd = (
+            f"--priors {' '.join(args.priors)}"
+            if args.priors is not None
+            else ""
+        )
+        proc = subprocess.run(
+            (
+                f"python {directory}/cluster.py "
+                f"-r {args.ref} "
+                f"-a {args.alt} "
+                f"-b {args.barcodes} "
+                f"-o {args.output} "
+                f"-k {args.clusters} "
+                f"{prior_cmd} "
+                f"--ploidy {args.ploidy} "
+                f"--err_rate {args.err_rate} "
+                f"--doublet_rate {args.doublet_rate} "
+                f"--stop_criterion {args.stop_criterion} "
+                f"--max_iter {args.max_iter} "
+                f"-t {args.threads}"
+            ),
+            shell=True,
+            executable="/bin/bash",
+            stdout=subprocess.PIPE,
+        )
+        print(proc.stdout.decode())
+    except Exception as e:
+        print(e)
+        if os.path.exists(f"{args.output}/clusters_tmp.tsv"):
             print("removing result tsv file because it may be corrupted...")
-            os.remove(f"{args.output}/results.tsv")
+            os.remove(f"{args.output}/clusters_tmp.tsv")
 
-print("scAVENGE pipeline finished!")
-print(f"check {args.output}/results.tsv for clustering results.")
+# cluster cell barcodes by genotype
+if os.path.exists(f"{args.output}/clusters.tsv"):
+    pass
+else:
+    args.ref = f"{args.output}/ref.mtx" if args.ref is None else args.ref
+    args.alt = f"{args.output}/alt.mtx" if args.alt is None else args.alt
+    try:
+        with open(f"{args.output}/clusters.tsv", "w") as f:
+            directory = os.path.dirname(
+                os.path.dirname(os.path.abspath(__file__))
+            )
+            proc = subprocess.run(
+                [
+                    f"{directory}/troublet/target/release/troublet",
+                    "--alts",
+                    args.alt,
+                    "--refs",
+                    args.ref,
+                    "--clusters",
+                    f"{args.output}/clusters_tmp.tsv",
+                ],
+                stdout=f,
+                stderr=subprocess.PIPE,
+            )
+            if proc.stdout is not None:
+                print(proc.stdout.decode())
+    except Exception as e:
+        print(e)
+        if os.path.exists(f"{args.output}/clusters.tsv"):
+            print(
+                "removing complete result tsv file because it may be corrupted..."
+            )
+            os.remove(f"{args.output}/clusters.tsv")
+

@@ -1,22 +1,20 @@
-#!/usr/bin/env/python
+#!/usr/bin/env python
 
 import argparse
 import ctypes
 from pickle import dump
 import numpy as np
 from scipy.io import mmread
-from scipy.special import logsumexp, lambertw
+from scipy.special import logsumexp
 from sklearn.preprocessing import binarize
 from numba import jit, vectorize, prange, set_num_threads, get_num_threads
 from numba.extending import get_cython_function_address
 import pandas as pd
 from tqdm import tqdm
 
-addr1 = get_cython_function_address("scipy.special.cython_special", "binom")
-addr2 = get_cython_function_address("scipy.special.cython_special", "beta")
+addr = get_cython_function_address("scipy.special.cython_special", "binom")
 functype = ctypes.CFUNCTYPE(ctypes.c_double, ctypes.c_double, ctypes.c_double)
-comb = functype(addr1)
-beta = functype(addr2)
+comb = functype(addr)
 
 
 @jit(nopython=True)
@@ -44,9 +42,41 @@ def binom(k, n, p):
 
 
 @jit(nopython=True)
+def poisson(x, l):
+    if l < 0:
+        value = 0
+    else:
+        value = l ** x * np.exp(l) / np.prod(np.arange(x) + 1)
+
+    return value
+
+
+@jit(nopython=True)
 def rescale(a):
 
     return (a - np.min(a)) / (np.max(a) - np.min(a))
+
+
+def get_selection_rates(
+    count_barcode_matrix, assignment, n_clusters, ploidy, access_rate
+):
+    selection_rates = np.empty(n_clusters, count_barcode_matrix.shape[1])
+    for idx in range(n_clusters):
+        selection_rates[idx, :] = (
+            (
+                1
+                - (
+                    count_barcode_matrix[
+                        np.where(assignment == n_clusters)[0]
+                    ].getnnz(axis=1)
+                    / count_barcode_matrix.shape[0]
+                )
+                - access_rate
+            )
+            / (1 - access_rate)
+        ) ** (1 / ploidy)
+
+    return selection_rates
 
 
 @vectorize("float64(int64, int64, int64, int64, float64, float64, float64)")
@@ -57,19 +87,15 @@ def get_log_likelihood(
         likelihood = 1
     else:
         likelihood = 0
-        for lat_ref in range(ploidy + 1):
-            for lat_alt in range(ploidy + 1):
-                if lat_ref + lat_alt > ploidy or lat_ref + lat_alt == 0:
-                    continue
+        for latent_total in range(1, ploidy + 1):
+            for latent_alt in range(latent_total + 1):
                 observed_alt_prob = binom(
-                    alt, ref + alt, lat_alt / (lat_ref + lat_alt)
+                    alt, ref + alt, latent_alt / latent_total
                 )
                 latent_alt_prob = hypergeom(
-                    lat_alt, ploidy, real, lat_ref + lat_alt
+                    latent_alt, ploidy, real, latent_total
                 )
-                latent_total_prob = binom(
-                    lat_ref + lat_alt, ploidy, selection_rate
-                )
+                latent_total_prob = binom(latent_total, ploidy, selection_rate)
                 likelihood += (
                     observed_alt_prob
                     * observed_total_prob
@@ -79,34 +105,6 @@ def get_log_likelihood(
         likelihood = likelihood * (1 - base_prob) + base_prob
 
     return np.log(likelihood)
-
-
-@jit(nopython=True, parallel=True)
-def get_total_freq_matrix(count_loci_matrix):
-    count_matrix_data, nz_indptr, n_barcodes = count_loci_matrix
-    freq_matrix = np.zeros((len(nz_indptr) - 1, np.max(count_matrix_data) + 1))
-
-    for idx in prange(len(nz_indptr) - 1):
-        counts = count_matrix_data[nz_indptr[idx] : nz_indptr[idx + 1]]
-        for count in counts:
-            freq_matrix[idx, count] += 1
-        freq_matrix[idx, 0] += n_barcodes - len(counts)
-
-    return freq_matrix
-
-
-def get_zipoisson_mle(freqs):
-    counts = np.arange(len(freqs))
-    probs = freqs / np.sum(freqs)
-    mean = np.sum(counts * probs)
-    if 1 - probs[0] == 0:
-        expected_count, zero_rate = mean, probs[0]
-    else:
-        s = mean / (1 - probs[0])
-        expected_count = np.real(lambertw(-s * np.exp(-s)) + s)
-        zero_rate = 1 - mean / expected_count if expected_count != 0 else 1
-
-    return zero_rate, expected_count
 
 
 @jit(nopython=True, parallel=True)
@@ -272,7 +270,6 @@ def get_max_likelihoods(
                 base_prob,
             )
             prev_total_log_likelihood = total_log_likelihood
-            iter += 1
 
     if abs(total_log_likelihood - prev_total_log_likelihood) > stop_criterion:
         print("WARNING: The expected likelihood did not converge.")
@@ -280,17 +277,16 @@ def get_max_likelihoods(
     return real_count_matrix, log_likelihood_matrix
 
 
-def detect_doublets(log_likelihood_matrix, threshold=None):
-    normalized_matrix = log_likelihood_matrix / np.sum(
-        log_likelihood_matrix, axis=1
-    ).reshape(-1, 1)
-    rescaled_matrix = 1 - rescale(normalized_matrix)
-    sorted_rescaled_matrix = np.sort(rescaled_matrix, axis=1)
-    difference = np.diff(sorted_rescaled_matrix[:, [-1, -2]], axis=1).flatten()
-    difference_rescaled = rescale(difference)
-    doublet_mask = difference_rescaled < threshold
+# def detect_doublets(log_likelihood_matrix, threshold=None):
+# normalized_matrix = log_likelihood_matrix / np.sum(
+#     log_likelihood_matrix, axis=1
+# ).reshape(-1, 1)
+# rescaled_matrix = 1 - rescale(normalized_matrix)
+# sorted_rescaled_matrix = np.sort(rescaled_matrix, axis=1)
+# difference = np.diff(sorted_rescaled_matrix[:, [-1, -2]], axis=1).flatten()
+# doublet_mask = difference < threshold
 
-    return doublet_mask
+# return doublet_mask
 
 
 def cluster(args):
@@ -351,49 +347,19 @@ def cluster(args):
         ploidy=args.ploidy,
         base_prob=args.err_rate,
     )
-    singlet_mask = np.ones(ref_matrix.shape[1], dtype=bool)
-    singlet_indices = np.where(singlet_mask)[0]
-    for _ in range(20):
-        (
-            real_count_matrix,
-            max_likelihood_matrix[singlet_indices, :],
-        ) = get_max_likelihoods(
-            ref_matrix=ref_matrix[:, singlet_indices],
-            alt_matrix=alt_matrix[:, singlet_indices],
-            real_count_matrix=real_count_matrix,
-            init_temperature=init_temperature,
-            priors=args.priors,
-            max_iter=args.max_iter,
-            stop_criterion=args.stop_criterion,
-            total_probs=total_probs,
-            ploidy=args.ploidy,
-            base_prob=args.err_rate,
-        )
-        doublet_mask = detect_doublets(
-            max_likelihood_matrix[singlet_indices, :], args.doublet_threshold
-        )
-        print(
-            f"{np.sum(doublet_mask)} doublets detected out of "
-            f"{len(singlet_indices)} barcodes"
-        )
-        if not np.any(doublet_mask):
-            print("No doublets detected")
-            break
-        singlet_mask[singlet_mask] = ~doublet_mask
-        singlet_indices = np.where(singlet_mask)[0]
     print("Calculating likelihoods done")
 
     # write results in a tsv and pkl file
     if not args.output.endswith("/"):
         args.output += "/"
-    clusters = [f"cluster{n}" for n in range(args.clusters)]
-    cluster_info = pd.DataFrame(max_likelihood_matrix, columns=clusters)
-    assignment = cluster_info.idxmax(axis=1)
-    cluster_info["assignment"] = assignment.str.replace("cluster", "")
-    cluster_info["assignment"][~singlet_mask] = -1
-    cluster_info.to_csv(f"{args.output}results.tsv", index=False, sep="\t")
-    with open(f"{args.output}genotypes.pkl", "wb") as f:
-        dump(real_count_matrix, f)
+    barcodes = [barcode.strip() for barcode in open(args.barcodes)]
+    assignment = np.argmax(max_likelihood_matrix, axis=1).reshape(-1, 1)
+    cluster_info = pd.DataFrame(
+        np.concatenate(max_likelihood_matrix, axis=1),
+        index=barcodes,
+    )
+    cluster_info.insert(0, "assignment", assignment)
+    cluster_info.to_csv(f"{args.output}clusters_tmp.tsv", header=None, sep="\t")
 
 
 if __name__ == "__main__":
@@ -415,7 +381,7 @@ if __name__ == "__main__":
     parser.add_argument("-v", "--vcf", type=str, help="Vcf file")
     parser.add_argument(
         "-b",
-        "--barcode",
+        "--barcodes",
         required=True,
         type=str,
         help="Line-seperated text file of barcode sequences",
@@ -446,8 +412,8 @@ if __name__ == "__main__":
         ),
     )
     parser.add_argument(
-        "--doublet_threshold",
-        default=0.2,
+        "--doublet_rate",
+        default=0.1,
         type=float,
         help="Maximum difference of normalized likelihood to detect doublets",
     )
