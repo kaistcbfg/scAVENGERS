@@ -10,7 +10,6 @@ from sklearn.preprocessing import binarize
 from numba import jit, vectorize, prange, set_num_threads, get_num_threads
 from numba.extending import get_cython_function_address
 import pandas as pd
-from tqdm import tqdm
 
 addr = get_cython_function_address("scipy.special.cython_special", "binom")
 functype = ctypes.CFUNCTYPE(ctypes.c_double, ctypes.c_double, ctypes.c_double)
@@ -239,7 +238,7 @@ def get_max_likelihoods(
     temperatures = np.append(temperatures, [1])
     for temperature in temperatures:
         prev_total_log_likelihood = -np.inf
-        for iter in tqdm(range(max_iter)):
+        for iter in range(max_iter):
             log_likelihood_matrix = get_log_likelihood_matrix(
                 ref_barcode_matrix,
                 alt_barcode_matrix,
@@ -255,7 +254,7 @@ def get_max_likelihoods(
             total_log_likelihood = np.sum(
                 log_likelihood_matrix * posterior_matrix.T
             )
-            print(f"Iteration {iter}: T={temperature} L={total_log_likelihood}")
+            # print(f"Iteration {iter}: T={temperature} L={total_log_likelihood}")
             if (
                 abs(total_log_likelihood - prev_total_log_likelihood)
                 <= stop_criterion
@@ -355,8 +354,7 @@ def cluster(args):
     barcodes = [barcode.strip() for barcode in open(args.barcodes)]
     assignment = np.argmax(max_likelihood_matrix, axis=1).reshape(-1, 1)
     cluster_info = pd.DataFrame(
-        np.concatenate(max_likelihood_matrix, axis=1),
-        index=barcodes,
+        np.concatenate(max_likelihood_matrix, axis=1), index=barcodes,
     )
     cluster_info.insert(0, "assignment", assignment)
     cluster_info.to_csv(f"{args.output}clusters_tmp.tsv", header=None, sep="\t")
