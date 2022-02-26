@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
+import sys
 import argparse
 import ctypes
-from pickle import dump
 import numpy as np
 from scipy.io import mmread
 from scipy.special import logsumexp
@@ -271,28 +271,19 @@ def get_max_likelihoods(
             prev_total_log_likelihood = total_log_likelihood
 
     if abs(total_log_likelihood - prev_total_log_likelihood) > stop_criterion:
-        print("WARNING: The expected likelihood did not converge.")
+        print(
+            "WARNING: The expected likelihood did not converge.",
+            file=sys.stderr,
+        )
 
     return real_count_matrix, log_likelihood_matrix
-
-
-# def detect_doublets(log_likelihood_matrix, threshold=None):
-# normalized_matrix = log_likelihood_matrix / np.sum(
-#     log_likelihood_matrix, axis=1
-# ).reshape(-1, 1)
-# rescaled_matrix = 1 - rescale(normalized_matrix)
-# sorted_rescaled_matrix = np.sort(rescaled_matrix, axis=1)
-# difference = np.diff(sorted_rescaled_matrix[:, [-1, -2]], axis=1).flatten()
-# doublet_mask = difference < threshold
-
-# return doublet_mask
 
 
 def cluster(args):
     # set number of threads
     if args.threads <= get_num_threads():
         set_num_threads(args.threads)
-        print(f"{args.threads} cores used")
+        print(f"{args.threads} cores used", file=sys.stderr)
     else:
         raise ValueError(
             f"Not enough cores. {get_num_threads()} cores available in maximum."
@@ -305,7 +296,10 @@ def cluster(args):
     variant_indices = np.where(variant_occurences > 10)[0]
     ref_matrix = ref_matrix[variant_indices]
     alt_matrix = alt_matrix[variant_indices]
-    print("Importing done. %d variants and %d cell barcodes" % ref_matrix.shape)
+    print(
+        "Importing done. %d variants and %d cell barcodes" % ref_matrix.shape,
+        file=sys.stderr,
+    )
 
     # get priors
     if args.priors is None:
@@ -346,7 +340,7 @@ def cluster(args):
         ploidy=args.ploidy,
         base_prob=args.err_rate,
     )
-    print("Calculating likelihoods done")
+    print("Calculating likelihoods done", file=sys.stderr)
 
     # write results in a tsv and pkl file
     if not args.output.endswith("/"):
@@ -357,7 +351,7 @@ def cluster(args):
         np.concatenate(max_likelihood_matrix, axis=1), index=barcodes,
     )
     cluster_info.insert(0, "assignment", assignment)
-    cluster_info.to_csv(f"{args.output}clusters_tmp.tsv", header=None, sep="\t")
+    print(cluster_info.to_string(header=None, sep="\t"))
 
 
 if __name__ == "__main__":

@@ -166,27 +166,30 @@ else:
             if args.priors is not None
             else ""
         )
-        proc = subprocess.run(
-            (
-                f"python {directory}/cluster.py "
-                f"-r {args.ref} "
-                f"-a {args.alt} "
-                f"-b {args.barcodes} "
-                f"-o {args.output} "
-                f"-k {args.clusters} "
-                f"{prior_cmd} "
-                f"--ploidy {args.ploidy} "
-                f"--err_rate {args.err_rate} "
-                f"--doublet_rate {args.doublet_rate} "
-                f"--stop_criterion {args.stop_criterion} "
-                f"--max_iter {args.max_iter} "
-                f"-t {args.threads}"
-            ),
-            shell=True,
-            executable="/bin/bash",
-            stdout=subprocess.PIPE,
-        )
-        print(proc.stdout.decode())
+        with open(f"{args.output}/clusters_tmp.tsv", "w") as f:
+            proc = subprocess.run(
+                (
+                    f"python {directory}/cluster.py "
+                    f"-r {args.ref} "
+                    f"-a {args.alt} "
+                    f"-b {args.barcodes} "
+                    f"-o {args.output} "
+                    f"-k {args.clusters} "
+                    f"{prior_cmd} "
+                    f"--ploidy {args.ploidy} "
+                    f"--err_rate {args.err_rate} "
+                    f"--doublet_rate {args.doublet_rate} "
+                    f"--stop_criterion {args.stop_criterion} "
+                    f"--max_iter {args.max_iter} "
+                    f"-t {args.threads}"
+                ),
+                shell=True,
+                executable="/bin/bash",
+                stdout=f,
+                stderr=subprocess.PIPE,
+            )
+            if proc.stdout is not None:
+                print(proc.stdout.decode())
     except Exception as e:
         print(e)
         if os.path.exists(f"{args.output}/clusters_tmp.tsv"):
