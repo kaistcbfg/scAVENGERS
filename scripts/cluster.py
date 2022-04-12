@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import sys
+from io import StringIO
 import argparse
 import ctypes
 import numpy as np
@@ -254,7 +255,7 @@ def get_max_likelihoods(
             total_log_likelihood = np.sum(
                 log_likelihood_matrix * posterior_matrix.T
             )
-            # print(f"Iteration {iter}: T={temperature} L={total_log_likelihood}")
+            # print(f"Iteration {iter}: T={temperature} L={total_log_likelihood}", file=sys.stderr)
             if (
                 abs(total_log_likelihood - prev_total_log_likelihood)
                 <= stop_criterion
@@ -347,11 +348,11 @@ def cluster(args):
         args.output += "/"
     barcodes = [barcode.strip() for barcode in open(args.barcodes)]
     assignment = np.argmax(max_likelihood_matrix, axis=1).reshape(-1, 1)
-    cluster_info = pd.DataFrame(
-        np.concatenate(max_likelihood_matrix, axis=1), index=barcodes,
-    )
+    cluster_info = pd.DataFrame(max_likelihood_matrix, index=barcodes)
     cluster_info.insert(0, "assignment", assignment)
-    print(cluster_info.to_string(header=None, sep="\t"))
+    stream = StringIO()
+    cluster_info.to_csv(stream, header=None, sep="\t")
+    print(stream.getvalue().strip())
 
 
 if __name__ == "__main__":
@@ -402,12 +403,6 @@ if __name__ == "__main__":
             "Baseline probability. DO NOT set this parameter zero, because it leads"
             " to log-zeros. Defaults to 0.001."
         ),
-    )
-    parser.add_argument(
-        "--doublet_rate",
-        default=0.1,
-        type=float,
-        help="Maximum difference of normalized likelihood to detect doublets",
     )
     parser.add_argument(
         "--stop_criterion",

@@ -1,0 +1,41 @@
+THREADS: 1
+
+CLUSTER:
+  # number of genotypes in multiplexed sample
+  n_genotypes: 10
+  # ploidy of the organism of interest
+  ploidy: 2
+  # error rate correction parameter of probability model
+  err_rate: 0.001
+  # difference of likelihood to stop the iteration
+  stop_criterion: 0.1
+  # maximum number of iteration
+  max_iter: 1000
+
+DATA:
+  # path to directory for saving output files
+  out_dir:
+    /home/rotate/hansb/scATACseq_cluster/
+  # path to genome sequence file
+  genome:
+    /home/rotate/hansb/scATACseq_cluster/data/pbmc/genome.fa
+  # path to alignment file
+  alignment:
+    /home/rotate/hansb/scATACseq_cluster/data/pbmc/all_read_merge.bam
+  # path to text file containing line-seperated list of barcodes
+  barcode:
+    /home/rotate/hansb/scATACseq_cluster/data/pbmc/barcodes.txt
+
+VARIANT_CALLER:
+  # variant caller to use. Choose "freebayes" or "strelka."
+  caller: "strelka"
+  # minimum quality score of variant, used only if the caller is "freebayes"
+  min_qual: 0
+  # whether to use low-GQX variants only, used only if the caller is "strelka"
+  lowgqx: False
+
+VARTRIX:
+  # minimum mapping quality of read to use in vartrix
+  mapq: 30
+
+# TROUBLET:
