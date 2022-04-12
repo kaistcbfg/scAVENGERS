@@ -3,7 +3,7 @@
 ## Overview
 scAVENGERS demultiplexes snATAC-seq data by genotype, referring to the variant information.
 
-The pipeline is composed of four stages: calling variants, making count matrices for each cell barcode and loci, clustering the cell barcodes, and detecting doublets. The stages are implemented in a Python files scavengers.py and cluster.py, and a precompiled doublet detection program troublet, implemented in Rust.
+The pipeline is composed of four stages: calling variants, making count matrices for each cell barcode and loci, clustering the cell barcodes, and detecting doublets. The stages are implemented in a snakemake pipeline.
 
 The generative model is based on data generating process of snATAC-seq reads: the attachment of the reads to barcode sequences and the following PCR amplification of the reads.
 
