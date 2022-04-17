@@ -1,5 +1,24 @@
-THREADS: 1
+# number of threads to use
+# to make this valid, you must set the number of cores when running snakemake pipeline.
+# e.g. -j 10
+THREADS: 10
 
+# input and output data path
+DATA:
+  # path to directory for saving output files
+  out_dir:
+    outs_strelka_test
+  # path to genome sequence file
+  genome:
+    pbmc/genome.fa
+  # path to alignment file
+  alignment:
+    pbmc/all_read_merge.bam
+  # path to text file containing line-seperated list of barcodes
+  barcode:
+    pbmc/barcodes.txt
+
+# cluster.py settings
 CLUSTER:
   # number of genotypes in multiplexed sample
   n_genotypes: 10
@@ -12,20 +31,7 @@ CLUSTER:
   # maximum number of iteration
   max_iter: 1000
 
-DATA:
-  # path to directory for saving output files
-  out_dir:
-    /home/rotate/hansb/scATACseq_cluster/
-  # path to genome sequence file
-  genome:
-    /home/rotate/hansb/scATACseq_cluster/data/pbmc/genome.fa
-  # path to alignment file
-  alignment:
-    /home/rotate/hansb/scATACseq_cluster/data/pbmc/all_read_merge.bam
-  # path to text file containing line-seperated list of barcodes
-  barcode:
-    /home/rotate/hansb/scATACseq_cluster/data/pbmc/barcodes.txt
-
+# variant caller settings
 VARIANT_CALLER:
   # variant caller to use. Choose "freebayes" or "strelka."
   caller: "strelka"
@@ -34,8 +40,10 @@ VARIANT_CALLER:
   # whether to use low-GQX variants only, used only if the caller is "strelka"
   lowgqx: False
 
+# vartrix settings
 VARTRIX:
   # minimum mapping quality of read to use in vartrix
   mapq: 30
 
+# troublet settings
 # TROUBLET:

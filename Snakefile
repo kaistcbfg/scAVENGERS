@@ -31,18 +31,17 @@ rule call_variants:
                 + "-f {input.fasta} -iXu -C 2 -q 30 -n 3 -E 1 -m 30 "
                 + "--min-coverage 20 --pooled-continuous --skip-coverage 100000 {input.bam} | "
                 + 'vcffilter -f "QUAL > {params.min_qual}" | '
-                + "bgzip > {output}"
+                + "vcftools view -Ob > {output}"
             )
         elif config["VARIANT_CALLER"]["caller"] == "strelka":
             lowgqx_cmd = "-f LowGQX" if config["VARIANT_CALLER"]["lowgqx"] else ""
             shell(
-                "{input.strelka}/bin/configureStrelkaGermlineWorkflow.py"
-                "--bam {input.bam} --referenceFasta {input.fasta} --rundir {params.outdir}"
+                "{input.strelka}/bin/configureStrelkaGermlineWorkflow.py "
+                "--bam {input.bam} --referenceFasta {input.fasta} --runDir {params.outdir}"
             )
             shell("{params.outdir}/runWorkflow.py -m local -j {threads}")
-            shell("mv {params.outdir}/variants.vcf.gz {params.outdir}/variants.tmp.vcf.gz")
             shell(
-                "bcftools view {params.outdir}/variants.tmp.vcf.gz | "
+                "bcftools view {params.outdir}/results/variants/variants.vcf.gz | "
                 + "awk '{if ($0~\"#\" || length($4)==1 && length($5)==1) {print}}' | "
                 + f"bcftools view -Ob {lowgqx_cmd}"
                 + "> {output}" 
@@ -63,7 +62,7 @@ rule make_matrix:
         mapq = config["VARTRIX"]["mapq"]
     threads:
         config["THREADS"]
-    shell: "vartrix -b {input.bam} -v {input.vcf} --fasta {input.fasta} -c {input.barcode}"
+    shell: "vartrix -b {input.bam} -v {input.vcf} --fasta {input.fasta} -c {input.barcode} "
         + "--out-matrix {output.alt} --ref-matrix {output.ref} "
         + "--mapq {params.mapq} --scoring-method coverage --threads {threads}"
 
