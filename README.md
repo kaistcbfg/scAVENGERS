@@ -3,12 +3,12 @@
 ## Overview
 scAVENGERS demultiplexes snATAC-seq data by genotype, referring to the variant information.
 
-The pipeline is composed of four stages: calling variants, making count matrices for each cell barcode and loci, clustering the cell barcodes, and detecting doublets. The stages are implemented in a snakemake pipeline.
+The pipeline is composed of four stages: calling variants, making count matrices for each cell barcode and loci, clustering the cell barcodes, and detecting doublets. These stages are implemented in a snakemake pipeline (https://snakemake.github.io/).
 
 The generative model is based on data generating process of snATAC-seq reads: the attachment of the reads to barcode sequences and the following PCR amplification of the reads.
 
 ## Requirements
-scAVENGERS is intended to run at Linux with bash support. The program is successfully tested under the environment below. These requirements are provided in a conda environment and a shell script.
+The program is successfully tested under the environment below. These requirements are provided in a conda environment and a shell script.
 |name|version|remarks|
 |---|---|---|
 |**External tools**|
@@ -43,7 +43,7 @@ conda activate scavengers
 ### 2. Preparing data
 Alignment file in bam format and line-seperated list of barcodes in text file are required to run scAVENGERS.
 
-You can acquire alignment file and barcodes in ease by using Cellranger ATAC count (https://github.com/10XGenomics/cellranger-atac). The tool aligns fastq files by using bwa mem-like algorithm. The alignments are stored in `outs/possorted_bam.bam`, and the barcodes are stored in `outs/filtered_peak_bc_matrix/barcodes.tsv`.
+For instance, you can acquire the alignment file and barcodes in ease by using Cellranger ATAC count (https://github.com/10XGenomics/cellranger-atac). The tool aligns fastq files by using bwa mem-like algorithm. The alignments are stored in `outs/possorted_bam.bam`, and the barcodes are stored in `outs/filtered_peak_bc_matrix/barcodes.tsv`.
 
 ### 4. Setting parameters
 Via config file in yaml format, you can set parameters for the execution of pipeline. The parameters include path of the input and output data and settings for each program in the pipeline. The format is provided in `config.yaml`. 

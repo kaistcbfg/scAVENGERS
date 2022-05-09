@@ -7,16 +7,16 @@ THREADS: 10
 DATA:
   # path to directory for saving output files
   out_dir:
-    outs_strelka_test
+    outdir
   # path to genome sequence file
   genome:
-    pbmc/genome.fa
+    genome.fa
   # path to alignment file
   alignment:
-    pbmc/all_read_merge.bam
+    alignment.bam
   # path to text file containing line-seperated list of barcodes
   barcode:
-    pbmc/barcodes.txt
+    barcodes.txt
 
 # cluster.py settings
 CLUSTER:
@@ -46,4 +46,10 @@ VARTRIX:
   mapq: 30
 
 # troublet settings
-# TROUBLET:
+TROUBLET:
+  # doublet prior
+  doublet_prior: 0.5
+  # doublet posterior threshold
+  doublet_threshold: 0.9
+  # singlet posterior threshold
+  singlet_threshold: 0.9
