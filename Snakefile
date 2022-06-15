@@ -14,7 +14,7 @@ rule get_external_programs:
     output:
         f"{STRELKA_DIR}/bin/configureStrelkaGermlineWorkflow.py",
         f"{SNAKEDIR}/troublet"
-    shell: "scripts/get_programs.sh {SNAKEDIR}"
+    shell: "{SNAKEDIR}/scripts/get_programs.sh {SNAKEDIR}"
 
 
 rule call_variants:
@@ -29,6 +29,8 @@ rule call_variants:
     threads:
         THREADS
     run:
+        import os
+        
         shell("mkdir -p {OUTDIR}")
         if config["VARIANT_CALLER"]["caller"] == "freebayes":
             shell(
@@ -41,10 +43,11 @@ rule call_variants:
             )
         elif config["VARIANT_CALLER"]["caller"] == "strelka":
             lowgqx_cmd = "-f LowGQX" if config["VARIANT_CALLER"]["lowgqx"] else ""
-            shell(
-                "{input.strelka} --bam {input.bam} --referenceFasta {input.fasta} "
-                "--runDir {OUTDIR}"
-            )
+            if not os.path.exists(f"{OUTDIR}/runWorkflow.py"):    
+                shell(
+                    "{input.strelka} --bam {input.bam} --referenceFasta {input.fasta} "
+                    "--runDir {OUTDIR}"
+                )
             shell("{OUTDIR}/runWorkflow.py -m local -j {threads}")
             shell(
                 "bcftools view {OUTDIR}/results/variants/variants.vcf.gz | "
