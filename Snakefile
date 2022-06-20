@@ -93,7 +93,7 @@ rule make_clusters:
         THREADS
     run:
         shell(
-            "scripts/cluster.py -r {input.ref} -a {input.alt} -b {input.barcode} "
+            SNAKEDIR + "/scripts/cluster.py -r {input.ref} -a {input.alt} -b {input.barcode} "
             "-o {OUTDIR} -k {params.k} --ploidy {params.ploidy} "
             "--err_rate {params.err_rate} --stop_criterion {params.stop_criterion} "
             "--max_iter {params.max_iter} -t {threads}"
