@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
+import os
 import sys
-from io import StringIO
 import argparse
 import ctypes
 import numpy as np
@@ -343,16 +343,17 @@ def cluster(args):
     )
     print("Calculating likelihoods done", file=sys.stderr)
 
-    # write results in a tsv and pkl file
-    if not args.output.endswith("/"):
-        args.output += "/"
+    # write results in a tsv file
     barcodes = [barcode.strip() for barcode in open(args.barcodes)]
     assignment = np.argmax(max_likelihood_matrix, axis=1).reshape(-1, 1)
     cluster_info = pd.DataFrame(max_likelihood_matrix, index=barcodes)
     cluster_info.insert(0, "assignment", assignment)
-    stream = StringIO()
-    cluster_info.to_csv(stream, header=None, sep="\t")
-    print(stream.getvalue().strip())
+    outfile = (
+        os.path.abspath(args.output) + "/clusters_tmp.tsv"
+        if args.output is not None
+        else sys.stdout()
+    )
+    cluster_info.to_csv(outfile, header=None, sep="\t")
 
 
 if __name__ == "__main__":
@@ -380,7 +381,12 @@ if __name__ == "__main__":
         help="Line-seperated text file of barcode sequences",
     )
     parser.add_argument(
-        "-o", "--output", required=True, type=str, help="Output directory.",
+        "-o",
+        "--output",
+        required=True,
+        type=str,
+        default=None,
+        help="Output directory.",
     )
     parser.add_argument(
         "-k", "--clusters", required=True, type=int, help="Number of genotypes."
