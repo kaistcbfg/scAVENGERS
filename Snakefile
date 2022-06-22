@@ -59,6 +59,7 @@ rule call_variants:
                 f"bcftools view {lowgqx_cmd} -Ob "
                 "-o {output}" 
             )
+            shell("rm {OUTDIR}/results/variants/variants.vcf.gz")
         else:
             raise ValueError("Variant caller must be freebayes or strelka.")
 
