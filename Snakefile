@@ -7,13 +7,16 @@ THREADS = config["THREADS"]
 
 rule all:
     input:
-        f"{OUTDIR}/clusters.tsv"
+        f"{OUTDIR}/clusters.tsv",
+        f"{OUTDIR}/ambient_rna.txt",
+        f"{OUTDIR}/cluster_genotypes.vcf"
 
 
 rule get_external_programs:
     output:
         f"{STRELKA_DIR}/bin/configureStrelkaGermlineWorkflow.py",
-        f"{SNAKEDIR}/troublet"
+        f"{SNAKEDIR}/troublet",
+        f"{SNAKEDIR}/consensus.py"
     shell: "{SNAKEDIR}/scripts/get_programs.sh {SNAKEDIR}"
 
 
@@ -39,7 +42,7 @@ rule call_variants:
                 "-f {input.fasta} -iXu -C 2 -q 30 -n 3 -E 1 -m 30 "
                 "--min-coverage 20 --pooled-continuous --skip-coverage 100000 {input.bam} | "
                 'vcffilter -f "QUAL > {params.min_qual}" | '
-                "vcftools view -Ob > {output}"
+                "vcftools view -Ob -o {output}"
             )
         elif config["VARIANT_CALLER"]["caller"] == "strelka":
             lowgqx_cmd = "-f LowGQX" if config["VARIANT_CALLER"]["lowgqx"] else ""
@@ -53,7 +56,7 @@ rule call_variants:
                 "bcftools view {OUTDIR}/results/variants/variants.vcf.gz | "
                 "{SNAKEDIR}/scripts/get_snv.awk | "
                 f"bcftools view {lowgqx_cmd} -Ob "
-                "> {output}" 
+                "-o {output}" 
             )
         else:
             raise ValueError("Variant caller must be freebayes or strelka.")
@@ -116,5 +119,34 @@ rule call_doublets:
             "{input.troublet} --refs {input.ref} --alts {input.alt} "
             "--clusters {input.cluster} --doublet_prior {params.doublet_prior} "
             "--doublet_threshold {params.doublet_threshold} "
-            "--singlet_threshold {params.singlet_threshold}"
+            "--singlet_threshold {params.singlet_threshold} > {output}"
         )
+
+rule get_genotype:
+    input:
+        ref = f"{OUTDIR}/ref.mtx",
+        alt = f"{OUTDIR}/alt.mtx",
+        vcf = f"{OUTDIR}/variants.vcf.gz",
+        cluster=f"{OUTDIR}/clusters.tsv",
+        consensus=f"{SNAKEDIR}/consensus.py"
+    output:
+        amb_rna="{OUTDIR}/ambient_rna.txt",
+        vcf="{OUTDIR}/cluster_genotypes.vcf"
+    params:
+        ploidy = config["CLUSTER"]["ploidy"]
+    run:
+        shell("iconv -f ASCII -t UTF-8 <(gzip -d {input.vcf}) > {OUTDIR}/variants.utf8.vcf")
+        if params.ploidy in (1, 2):
+            shell(
+                "{input.consensus} -c {input.cluster} -v {OUTDIR}/variants.utf8.vcf "
+                "-a {input.alt} -r {input.ref} -p {params.ploidy} "
+                "--soup_out {output.amb_rna} --vcf_out {output.vcf}"
+            )
+        else:
+            with open(output.amb_rna, "w") as f:
+                f.write(
+                    "Genotype inference inavailable because the ploidy number "
+                    "is not supported."
+                )
+            with open(output.vcf, "w") as f:
+                f.write()
