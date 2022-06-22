@@ -16,7 +16,8 @@ rule get_external_programs:
     output:
         f"{STRELKA_DIR}/bin/configureStrelkaGermlineWorkflow.py",
         f"{SNAKEDIR}/troublet",
-        f"{SNAKEDIR}/consensus.py"
+        f"{SNAKEDIR}/consensus.py",
+        f"{SNAKEDIR}/stan_consensus.pickle"
     shell: "{SNAKEDIR}/scripts/get_programs.sh {SNAKEDIR}"
 
 
@@ -128,17 +129,17 @@ rule get_genotype:
         alt = f"{OUTDIR}/alt.mtx",
         vcf = f"{OUTDIR}/variants.vcf.gz",
         cluster=f"{OUTDIR}/clusters.tsv",
-        consensus=f"{SNAKEDIR}/consensus.py"
+        consensus=f"{SNAKEDIR}/consensus.py",
+        stan=f"{SNAKEDIR}/stan_consensus.pickle"
     output:
         amb_rna="{OUTDIR}/ambient_rna.txt",
         vcf="{OUTDIR}/cluster_genotypes.vcf"
     params:
         ploidy = config["CLUSTER"]["ploidy"]
     run:
-        shell("iconv -f ASCII -t UTF-8 <(gzip -d {input.vcf}) > {OUTDIR}/variants.utf8.vcf")
         if params.ploidy in (1, 2):
             shell(
-                "{input.consensus} -c {input.cluster} -v {OUTDIR}/variants.utf8.vcf "
+                "{input.consensus} -c {input.cluster} -v {input.vcf} "
                 "-a {input.alt} -r {input.ref} -p {params.ploidy} "
                 "--soup_out {output.amb_rna} --vcf_out {output.vcf}"
             )
