@@ -137,18 +137,5 @@ rule get_genotype:
         vcf="{OUTDIR}/cluster_genotypes.vcf"
     params:
         ploidy = config["CLUSTER"]["ploidy"]
-    run:
-        if params.ploidy in (1, 2):
-            shell(
-                "{input.consensus} -c {input.cluster} -v {input.vcf} "
-                "-a {input.alt} -r {input.ref} -p {params.ploidy} "
-                "--soup_out {output.amb_rna} --vcf_out {output.vcf}"
-            )
-        else:
-            with open(output.amb_rna, "w") as f:
-                f.write(
-                    "Genotype inference inavailable because the ploidy number "
-                    "is not supported."
-                )
-            with open(output.vcf, "w") as f:
-                f.write()
+    conda: "envs/consensus.yml"
+    script: "scripts/get_genotype.py"

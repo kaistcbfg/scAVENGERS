@@ -37,7 +37,7 @@ The required softwares and packages are provided as a conda environment. Conda (
 ```
 git clone https://github.com/kaistcbfg/scAVENGERS
 cd scAVENGERS
-conda env create --file environment.yaml
+conda env create --file envs/environment.yml
 conda activate scavengers
 ```
 ### 2. Preparing data
@@ -52,7 +52,7 @@ Via config file in yaml format, you can set parameters for the execution of pipe
 The below is a command to run scAVENGERS with 10 jobs. To note, you must also set `THREADS` argument in config file in adequate value to run with intended number of jobs. With the arguments, the whole pipeline for demultiplexing will be executed. scAVENGERS require an indexed alignment file, an indexed reference genome file and a line-seperated list of barcode sequences in a text file.
 ```
 cd scAVENGERS
-snakemake --configfile config.yaml -j 10
+snakemake --configfile config.yaml -j 10 --use-conda
 ```
 
 
