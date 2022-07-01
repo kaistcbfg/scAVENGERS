@@ -18,6 +18,7 @@ rule get_external_programs:
         f"{SNAKEDIR}/troublet",
         f"{SNAKEDIR}/consensus.py",
         f"{SNAKEDIR}/stan_consensus.pickle"
+    conda: "envs/conesnsus.yml"
     shell: "{SNAKEDIR}/scripts/get_programs.sh {SNAKEDIR}"
 
 

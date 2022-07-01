@@ -9,5 +9,6 @@ tar -xvf $1/2.0.tar.gz -C $1
 cargo build --release --manifest-path $1/souporcell-2.0/troublet/Cargo.toml
 mv $1/souporcell-2.0/troublet/target/release/troublet $1/troublet
 mv $1/souporcell-2.0/consensus.py $1
-mv $1/souporcell-2.0/stan_consensus.pickle $1
+mv $1/souporcell-2.0/compile_stan_model.py $1
 rm -r $1/souporcell-2.0 $1/2.0.tar.gz $1/strelka-2.9.10.centos6_x86_64.tar.bz2
+python compile_stan_model.py
