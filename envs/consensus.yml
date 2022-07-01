@@ -75,8 +75,7 @@ dependencies:
   - ncurses=6.3=h27087fc_1
   - netcdf4=1.5.8=nompi_py38h2823cc8_101
   - numpy=1.23.0=py38h3a7f9d9_0
-  - openjpeg=2.4.0=hb52868f_1
-  - openssl=3.0.4=h166bdaf_0
+  - openjpeg=2.4.0=hb52868f_1 
   - packaging=21.3=pyhd8ed1ab_0
   - pandas=1.4.3=py38h47df419_0
   - pillow=9.1.1=py38h0ee0e06_1
