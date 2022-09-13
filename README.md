@@ -73,8 +73,8 @@ The result file `clusters.tsv` is structured like below. To note, the format is 
 |log_prob_doublet|log doublet probabilty calculated by troublet|
 |cluster{n}|log likelihood of the assignment on cluster n.|
 
-## 6. Tutorial: demultiplexing prefrontal cortex scATAC-seq data
-We prepared prefrontal cortex scATAC-seq synthetic mixture data for users who are new to scAVENGERS. We extracted half of chromosme 1 due to the memory issue. Thus, the clustering performance is inevitably low, so that most of the call barcodes will be unassigned.
+## Tutorial: demultiplexing prefrontal cortex scATAC-seq data
+We prepared prefrontal cortex scATAC-seq (PRJNA729525) synthetic mixture data for users who are new to scAVENGERS. We extracted half of chromosme 1 due to the memory issue. Thus, the clustering performance is inevitably low, so that most of the call barcodes will be unassigned.
 ### Downloading and preparing dataset
 The data will be prepared after running the script below. Note that the genome fasta file must be decompressed. If the genome fasta file is not decompressed, the whole pipeline will halt when running vartrix.
 ```
@@ -88,3 +88,9 @@ In the directory where the example data is in, running scAVENGERS will produce r
 ```
 snakemake -s {scAVENGERS_DIRECTORY} -j 10 --configfile config.yaml --use-conda
 ```
+
+## Future updates
+The feature below may be updated in future.
+- Supporting heterogenous ploidy for each cell and genomic region
+- Developing generative model of doublet and ambient variant detection
+- Some additional optimizations
