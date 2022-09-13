@@ -92,5 +92,5 @@ snakemake -s {scAVENGERS_DIRECTORY} -j 10 --configfile config.yaml --use-conda
 ## Future updates
 The feature below may be updated in future.
 - Supporting heterogenous ploidy for each cell and genomic region
-- Developing generative model of doublet and ambient variant detection
+- Developing generative model for doublet and ambient variant detection
 - Some additional optimizations
