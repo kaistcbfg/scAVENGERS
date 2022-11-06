@@ -389,7 +389,7 @@ if __name__ == "__main__":
         help="Output directory.",
     )
     parser.add_argument(
-        "-k", "--clusters", required=True, type=int, help="Number of genotypes."
+        "-k", "--clusters", required=True, type=int, help="Number of donors."
     )
     parser.add_argument(
         "--priors",

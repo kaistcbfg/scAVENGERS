@@ -55,10 +55,7 @@ rule call_variants:
                 )
             shell("{OUTDIR}/runWorkflow.py -m local -j {threads}")
             shell(
-                "bcftools view {OUTDIR}/results/variants/variants.vcf.gz | "
-                "{SNAKEDIR}/scripts/get_snv.awk | "
-                f"bcftools view {lowgqx_cmd} -Ob "
-                "-o {output}" 
+                "bcftools view -v snps {lowgqx_cmd} -Ob -o {output} {OUTDIR}/results/variants/variants.vcf.gz"
             )
             shell("rm {OUTDIR}/results/variants/variants.vcf.gz")
         else:
