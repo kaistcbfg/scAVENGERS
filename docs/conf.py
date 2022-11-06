@@ -18,7 +18,7 @@ extensions = ['myst_parser']
 source_suffix = {'.rst': 'restructuredtext', '.txt': 'markdown', '.md': 'markdown'}
 
 templates_path = ['_templates']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['Thumbs.db', '.DS_Store']
 
 
 
