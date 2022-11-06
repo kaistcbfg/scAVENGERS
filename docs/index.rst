@@ -36,6 +36,7 @@ The feature below may be updated in future.
 - Some additional optimizations
 
 .. toctree::
+   :maxdepth: 3
    Running scAVENGERS
       installing scAVENGERS
       excecuting scAVENGERS
@@ -44,3 +45,11 @@ The feature below may be updated in future.
       scAVENGERS pipeline
       scAVENGERS cluster
    Tutorial
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
