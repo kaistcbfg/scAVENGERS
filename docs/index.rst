@@ -26,6 +26,7 @@ Running scAVENGERS
 .. toctree::
    :caption: Running scAVENGERS
    :maxdepth: 1
+   :hidden:
 
    running_scavengers/installing_scAVENGERS.md
    running_scavengers/executing_scAVENGERS.md
@@ -37,19 +38,22 @@ scAVENGERS modules
 
 scAVENGERS provides some modules to aid demultiplexing single cell DNA sequencing data.
 
+* scAVENGERS pipeline: scAVENGERS pipeline is a whole pipeline for demultiplexing single cell ATAC-seq data.
+
+* scAVENGERS cluster: scAVENGERS cluster is a module for clustering cell barcodes in a multiplexed single cell ATAC-seq data.
+
 .. toctree::
    :caption: scAVENGERS modules
    :maxdepth: 1
+   :hidden:
 
    scavengers_modules/scAVENGERS_pipeline.md
    scavengers_modules/scAVENGERS_cluster.md
 
-Tutorial: demultiplexing synthetic human prefrontal cortex scATAC-seq mixture
------------------------------------------------------------------------------
-
 .. toctree::
-   :caption: Tutorial
+   :caption: Tutorial: demultiplexing synthetic human prefrontal cortex scATAC-seq mixture
    :maxdepth: 1
+   :hidden:
 
    tutorial/tutorial.md
 

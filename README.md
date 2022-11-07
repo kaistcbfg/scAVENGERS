@@ -33,3 +33,6 @@ Running scAVENGERS pipeline results to a tab-delimited file. This result file `c
 |log_prob_singleton|log singleton probability calculated by troublet|
 |log_prob_doublet|log doublet probabilty calculated by troublet|
 |cluster{n}|log likelihood of the assignment on cluster n.|
+
+## Documentation
+For further information, please refer to the documentation at https://scavengers.readthedocs.io/en/latest/.
