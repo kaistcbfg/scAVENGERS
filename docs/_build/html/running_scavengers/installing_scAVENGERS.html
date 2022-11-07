@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Installing scAVENGERS &mdash; scAVENGERS 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> scAVENGERS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Installing scAVENGERS</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#requirements">Requirements</a><ul>
+<li><a class="reference internal" href="#external-tools">External tools</a></li>
+<li><a class="reference internal" href="#python-and-its-packages">Python and its packages</a></li>
+<li><a class="reference internal" href="#rust">Rust</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scAVENGERS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Installing scAVENGERS</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/running_scavengers/installing_scAVENGERS.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="installing-scavengers">
+<h1>Installing scAVENGERS<a class="headerlink" href="#installing-scavengers" title="Permalink to this heading"></a></h1>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
+<p>The required softwares and packages are provided as a conda environment. Conda (https://www.anaconda.com/products/distribution) helps users to manage multiple packages easily. Running below will clone scAVENGERS repository create an environment named ‘scavengers.’</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">kaistcbfg</span><span class="o">/</span><span class="n">scAVENGERS</span>
+<span class="n">conda</span> <span class="n">env</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">scAVENGERS</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">environment</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+</section>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading"></a></h2>
+<p>The program is successfully tested under the environment below. Some of the requirements are automatically installed when <code class="docutils literal notranslate"><span class="pre">scAVENGERS</span> <span class="pre">pipeline</span></code> is executed.</p>
+<section id="external-tools">
+<h3>External tools<a class="headerlink" href="#external-tools" title="Permalink to this heading"></a></h3>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>version</p></th>
+<th class="head"><p>remarks</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>freebayes</p></td>
+<td><p>1.3.5</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>strelka2</p></td>
+<td><p>2.9.10</p></td>
+<td><p>Automatically downloaded by the shell script when the pipeline is excuted.</p></td>
+</tr>
+<tr class="row-even"><td><p>vartrix</p></td>
+<td><p>1.1.22</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>bcftools</p></td>
+<td><p>1.12</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>souporcell</p></td>
+<td><p>2.0</p></td>
+<td><p>Automatically downloaded and compiled by the shell script when the pipeline is executed. Troublet program will only be used among the whole pipeline.</p></td>
+</tr>
+<tr class="row-odd"><td><p>snakemake</p></td>
+<td><p>7.3.8</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="python-and-its-packages">
+<h3>Python and its packages<a class="headerlink" href="#python-and-its-packages" title="Permalink to this heading"></a></h3>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>version</p></th>
+<th class="head"><p>remarks</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>python</p></td>
+<td><p>3.8.12</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>numba</p></td>
+<td><p>0.54.1</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>numpy</p></td>
+<td><p>1.20.3</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>pandas</p></td>
+<td><p>1.4.0</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>scikit-learn</p></td>
+<td><p>1.0.2</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p>scipy</p></td>
+<td><p>1.7.3</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>pystan</p></td>
+<td><p>2.19.1.1</p></td>
+<td><p>Provided in another environment used for ambient variant detection</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="rust">
+<h3>Rust<a class="headerlink" href="#rust" title="Permalink to this heading"></a></h3>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>version</p></th>
+<th class="head"><p>remarks</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>rust</p></td>
+<td><p>1.59.0</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p>These dependencies are provided in a conda environment below.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">name</span><span class="p">:</span> <span class="n">scavengers</span>
+<span class="n">channels</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
+  <span class="o">-</span> <span class="n">bioconda</span>
+  <span class="o">-</span> <span class="n">defaults</span>
+<span class="n">dependencies</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">_libgcc_mutex</span><span class="o">=</span><span class="mf">0.1</span><span class="o">=</span><span class="n">conda_forge</span>
+  <span class="o">-</span> <span class="n">_openmp_mutex</span><span class="o">=</span><span class="mf">4.5</span><span class="o">=</span><span class="mi">1</span><span class="n">_gnu</span>
+  <span class="o">-</span> <span class="n">aioeasywebdav</span><span class="o">=</span><span class="mf">2.4.0</span><span class="o">=</span><span class="n">py38h578d9bd_1001</span>
+  <span class="o">-</span> <span class="n">aiohttp</span><span class="o">=</span><span class="mf">3.8.1</span><span class="o">=</span><span class="n">py38h0a891b7_1</span>
+  <span class="o">-</span> <span class="n">aiosignal</span><span class="o">=</span><span class="mf">1.2.0</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">amply</span><span class="o">=</span><span class="mf">0.1.4</span><span class="o">=</span><span class="n">py_0</span>
+  <span class="o">-</span> <span class="n">appdirs</span><span class="o">=</span><span class="mf">1.4.4</span><span class="o">=</span><span class="n">pyh9f0ad1d_0</span>
+  <span class="o">-</span> <span class="k">async</span><span class="o">-</span><span class="n">timeout</span><span class="o">=</span><span class="mf">4.0.2</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">attmap</span><span class="o">=</span><span class="mf">0.13.2</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">attrs</span><span class="o">=</span><span class="mf">21.4.0</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">backports</span><span class="o">=</span><span class="mf">1.0</span><span class="o">=</span><span class="n">py_2</span>
+  <span class="o">-</span> <span class="n">backports</span><span class="o">.</span><span class="n">functools_lru_cache</span><span class="o">=</span><span class="mf">1.6.4</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">bc</span><span class="o">=</span><span class="mf">1.07.1</span><span class="o">=</span><span class="n">h7f98852_0</span>
+  <span class="o">-</span> <span class="n">bcftools</span><span class="o">=</span><span class="mf">1.12</span><span class="o">=</span><span class="n">h45bccc9_1</span>
+  <span class="o">-</span> <span class="n">bcrypt</span><span class="o">=</span><span class="mf">3.2.0</span><span class="o">=</span><span class="n">py38h497a2fe_2</span>
+  <span class="o">-</span> <span class="n">binutils_impl_linux</span><span class="o">-</span><span class="mi">64</span><span class="o">=</span><span class="mf">2.36.1</span><span class="o">=</span><span class="n">h193b22a_2</span>
+  <span class="o">-</span> <span class="n">boto3</span><span class="o">=</span><span class="mf">1.21.38</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">botocore</span><span class="o">=</span><span class="mf">1.24.38</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">brotlipy</span><span class="o">=</span><span class="mf">0.7.0</span><span class="o">=</span><span class="n">py38h0a891b7_1004</span>
+  <span class="o">-</span> <span class="n">bzip2</span><span class="o">=</span><span class="mf">1.0.8</span><span class="o">=</span><span class="n">h7f98852_4</span>
+  <span class="o">-</span> <span class="n">c</span><span class="o">-</span><span class="n">ares</span><span class="o">=</span><span class="mf">1.18.1</span><span class="o">=</span><span class="n">h7f98852_0</span>
+  <span class="o">-</span> <span class="n">ca</span><span class="o">-</span><span class="n">certificates</span><span class="o">=</span><span class="mf">2022.6.15</span><span class="o">=</span><span class="n">ha878542_0</span>
+  <span class="o">-</span> <span class="n">cachetools</span><span class="o">=</span><span class="mf">5.0.0</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">certifi</span><span class="o">=</span><span class="mf">2022.6.15</span><span class="o">=</span><span class="n">py38h578d9bd_0</span>
+  <span class="o">-</span> <span class="n">cffi</span><span class="o">=</span><span class="mf">1.15.0</span><span class="o">=</span><span class="n">py38h3931269_0</span>
+  <span class="o">-</span> <span class="n">charset</span><span class="o">-</span><span class="n">normalizer</span><span class="o">=</span><span class="mf">2.0.12</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">coin</span><span class="o">-</span><span class="ow">or</span><span class="o">-</span><span class="n">cbc</span><span class="o">=</span><span class="mf">2.10.7</span><span class="o">=</span><span class="n">h3786ebc_0</span>
+  <span class="o">-</span> <span class="n">coin</span><span class="o">-</span><span class="ow">or</span><span class="o">-</span><span class="n">cgl</span><span class="o">=</span><span class="mf">0.60.3</span><span class="o">=</span><span class="n">he7e83c3_2</span>
+  <span class="o">-</span> <span class="n">coin</span><span class="o">-</span><span class="ow">or</span><span class="o">-</span><span class="n">clp</span><span class="o">=</span><span class="mf">1.17.6</span><span class="o">=</span><span class="n">h256e9bb_3</span>
+  <span class="o">-</span> <span class="n">coin</span><span class="o">-</span><span class="ow">or</span><span class="o">-</span><span class="n">osi</span><span class="o">=</span><span class="mf">0.108.6</span><span class="o">=</span><span class="n">h3b589db_2</span>
+  <span class="o">-</span> <span class="n">coin</span><span class="o">-</span><span class="ow">or</span><span class="o">-</span><span class="n">utils</span><span class="o">=</span><span class="mf">2.11.6</span><span class="o">=</span><span class="n">h573740c_0</span>
+  <span class="o">-</span> <span class="n">coincbc</span><span class="o">=</span><span class="mf">2.10.7</span><span class="o">=</span><span class="mi">0</span><span class="n">_metapackage</span>
+  <span class="o">-</span> <span class="n">colorama</span><span class="o">=</span><span class="mf">0.4.4</span><span class="o">=</span><span class="n">pyh9f0ad1d_0</span>
+  <span class="o">-</span> <span class="n">conda</span><span class="o">=</span><span class="mf">4.13.0</span><span class="o">=</span><span class="n">py38h578d9bd_1</span>
+  <span class="o">-</span> <span class="n">conda</span><span class="o">-</span><span class="n">package</span><span class="o">-</span><span class="n">handling</span><span class="o">=</span><span class="mf">1.8.1</span><span class="o">=</span><span class="n">py38h0a891b7_1</span>
+  <span class="o">-</span> <span class="n">configargparse</span><span class="o">=</span><span class="mf">1.5.3</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">connection_pool</span><span class="o">=</span><span class="mf">0.0.3</span><span class="o">=</span><span class="n">pyhd3deb0d_0</span>
+  <span class="o">-</span> <span class="n">cryptography</span><span class="o">=</span><span class="mf">36.0.2</span><span class="o">=</span><span class="n">py38h2b5fc30_1</span>
+  <span class="o">-</span> <span class="n">datrie</span><span class="o">=</span><span class="mf">0.8.2</span><span class="o">=</span><span class="n">py38h497a2fe_3</span>
+  <span class="o">-</span> <span class="n">decorator</span><span class="o">=</span><span class="mf">5.1.1</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">defusedxml</span><span class="o">=</span><span class="mf">0.7.1</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">docutils</span><span class="o">=</span><span class="mf">0.18.1</span><span class="o">=</span><span class="n">py38h578d9bd_1</span>
+  <span class="o">-</span> <span class="n">dropbox</span><span class="o">=</span><span class="mf">11.29.0</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">filechunkio</span><span class="o">=</span><span class="mf">1.8</span><span class="o">=</span><span class="n">py_2</span>
+  <span class="o">-</span> <span class="n">filelock</span><span class="o">=</span><span class="mf">3.6.0</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">freebayes</span><span class="o">=</span><span class="mf">1.3.5</span><span class="o">=</span><span class="n">py38ha193a2f_3</span>
+  <span class="o">-</span> <span class="n">frozenlist</span><span class="o">=</span><span class="mf">1.3.0</span><span class="o">=</span><span class="n">py38h0a891b7_1</span>
+  <span class="o">-</span> <span class="n">ftputil</span><span class="o">=</span><span class="mf">5.0.3</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">gcc_impl_linux</span><span class="o">-</span><span class="mi">64</span><span class="o">=</span><span class="mf">11.2.0</span><span class="o">=</span><span class="n">h82a94d6_15</span>
+  <span class="o">-</span> <span class="n">gitdb</span><span class="o">=</span><span class="mf">4.0.9</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">gitpython</span><span class="o">=</span><span class="mf">3.1.27</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">google</span><span class="o">-</span><span class="n">api</span><span class="o">-</span><span class="n">core</span><span class="o">=</span><span class="mf">2.5.0</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">google</span><span class="o">-</span><span class="n">api</span><span class="o">-</span><span class="n">python</span><span class="o">-</span><span class="n">client</span><span class="o">=</span><span class="mf">2.43.0</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">google</span><span class="o">-</span><span class="n">auth</span><span class="o">=</span><span class="mf">2.6.3</span><span class="o">=</span><span class="n">pyh6c4a22f_0</span>
+  <span class="o">-</span> <span class="n">google</span><span class="o">-</span><span class="n">auth</span><span class="o">-</span><span class="n">httplib2</span><span class="o">=</span><span class="mf">0.1.0</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">google</span><span class="o">-</span><span class="n">cloud</span><span class="o">-</span><span class="n">core</span><span class="o">=</span><span class="mf">2.2.2</span><span class="o">=</span><span class="n">pyh6c4a22f_0</span>
+  <span class="o">-</span> <span class="n">google</span><span class="o">-</span><span class="n">cloud</span><span class="o">-</span><span class="n">storage</span><span class="o">=</span><span class="mf">2.1.0</span><span class="o">=</span><span class="n">pyh6c4a22f_0</span>
+  <span class="o">-</span> <span class="n">google</span><span class="o">-</span><span class="n">crc32c</span><span class="o">=</span><span class="mf">1.1.2</span><span class="o">=</span><span class="n">py38h8838a9a_2</span>
+  <span class="o">-</span> <span class="n">google</span><span class="o">-</span><span class="n">resumable</span><span class="o">-</span><span class="n">media</span><span class="o">=</span><span class="mf">2.1.0</span><span class="o">=</span><span class="n">pyh6c4a22f_0</span>
+  <span class="o">-</span> <span class="n">googleapis</span><span class="o">-</span><span class="n">common</span><span class="o">-</span><span class="n">protos</span><span class="o">=</span><span class="mf">1.56.0</span><span class="o">=</span><span class="n">py38h578d9bd_0</span>
+  <span class="o">-</span> <span class="n">grpcio</span><span class="o">=</span><span class="mf">1.45.0</span><span class="o">=</span><span class="n">py38ha0cdfde_0</span>
+  <span class="o">-</span> <span class="n">gsl</span><span class="o">=</span><span class="mf">2.6</span><span class="o">=</span><span class="n">he838d99_2</span>
+  <span class="o">-</span> <span class="n">htslib</span><span class="o">=</span><span class="mf">1.12</span><span class="o">=</span><span class="n">h9093b5e_1</span>
+  <span class="o">-</span> <span class="n">httplib2</span><span class="o">=</span><span class="mf">0.20.4</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">icu</span><span class="o">=</span><span class="mf">70.1</span><span class="o">=</span><span class="n">h27087fc_0</span>
+  <span class="o">-</span> <span class="n">idna</span><span class="o">=</span><span class="mf">3.3</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">importlib</span><span class="o">-</span><span class="n">metadata</span><span class="o">=</span><span class="mf">4.11.3</span><span class="o">=</span><span class="n">py38h578d9bd_1</span>
+  <span class="o">-</span> <span class="n">importlib_resources</span><span class="o">=</span><span class="mf">5.6.0</span><span class="o">=</span><span class="n">pyhd8ed1ab_1</span>
+  <span class="o">-</span> <span class="n">iniconfig</span><span class="o">=</span><span class="mf">1.1.1</span><span class="o">=</span><span class="n">pyh9f0ad1d_0</span>
+  <span class="o">-</span> <span class="n">jinja2</span><span class="o">=</span><span class="mf">3.1.1</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">jmespath</span><span class="o">=</span><span class="mf">1.0.0</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">joblib</span><span class="o">=</span><span class="mf">1.1.0</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">jsonschema</span><span class="o">=</span><span class="mf">4.4.0</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">jupyter_core</span><span class="o">=</span><span class="mf">4.9.2</span><span class="o">=</span><span class="n">py38h578d9bd_0</span>
+  <span class="o">-</span> <span class="n">kernel</span><span class="o">-</span><span class="n">headers_linux</span><span class="o">-</span><span class="mi">64</span><span class="o">=</span><span class="mf">2.6.32</span><span class="o">=</span><span class="n">he073ed8_15</span>
+  <span class="o">-</span> <span class="n">keyutils</span><span class="o">=</span><span class="mf">1.6.1</span><span class="o">=</span><span class="n">h166bdaf_0</span>
+  <span class="o">-</span> <span class="n">krb5</span><span class="o">=</span><span class="mf">1.19.3</span><span class="o">=</span><span class="n">h3790be6_0</span>
+  <span class="o">-</span> <span class="n">ld_impl_linux</span><span class="o">-</span><span class="mi">64</span><span class="o">=</span><span class="mf">2.36.1</span><span class="o">=</span><span class="n">hea4e1c9_2</span>
+  <span class="o">-</span> <span class="n">libarchive</span><span class="o">=</span><span class="mf">3.5.2</span><span class="o">=</span><span class="n">hb890918_2</span>
+  <span class="o">-</span> <span class="n">libblas</span><span class="o">=</span><span class="mf">3.9.0</span><span class="o">=</span><span class="mi">12</span><span class="n">_linux64_openblas</span>
+  <span class="o">-</span> <span class="n">libcblas</span><span class="o">=</span><span class="mf">3.9.0</span><span class="o">=</span><span class="mi">12</span><span class="n">_linux64_openblas</span>
+  <span class="o">-</span> <span class="n">libcrc32c</span><span class="o">=</span><span class="mf">1.1.2</span><span class="o">=</span><span class="n">h9c3ff4c_0</span>
+  <span class="o">-</span> <span class="n">libcurl</span><span class="o">=</span><span class="mf">7.83.1</span><span class="o">=</span><span class="n">h7bff187_0</span>
+  <span class="o">-</span> <span class="n">libdeflate</span><span class="o">=</span><span class="mf">1.7</span><span class="o">=</span><span class="n">h7f98852_5</span>
+  <span class="o">-</span> <span class="n">libedit</span><span class="o">=</span><span class="mf">3.1.20191231</span><span class="o">=</span><span class="n">he28a2e2_2</span>
+  <span class="o">-</span> <span class="n">libev</span><span class="o">=</span><span class="mf">4.33</span><span class="o">=</span><span class="n">h516909a_1</span>
+  <span class="o">-</span> <span class="n">libffi</span><span class="o">=</span><span class="mf">3.4.2</span><span class="o">=</span><span class="n">h7f98852_5</span>
+  <span class="o">-</span> <span class="n">libgcc</span><span class="o">-</span><span class="n">devel_linux</span><span class="o">-</span><span class="mi">64</span><span class="o">=</span><span class="mf">11.2.0</span><span class="o">=</span><span class="n">h0952999_15</span>
+  <span class="o">-</span> <span class="n">libgcc</span><span class="o">-</span><span class="n">ng</span><span class="o">=</span><span class="mf">12.1.0</span><span class="o">=</span><span class="n">h8d9b700_16</span>
+  <span class="o">-</span> <span class="n">libgfortran</span><span class="o">-</span><span class="n">ng</span><span class="o">=</span><span class="mf">11.2.0</span><span class="o">=</span><span class="n">h69a702a_11</span>
+  <span class="o">-</span> <span class="n">libgfortran5</span><span class="o">=</span><span class="mf">11.2.0</span><span class="o">=</span><span class="n">h5c6108e_11</span>
+  <span class="o">-</span> <span class="n">libgomp</span><span class="o">=</span><span class="mf">12.1.0</span><span class="o">=</span><span class="n">h8d9b700_16</span>
+  <span class="o">-</span> <span class="n">libiconv</span><span class="o">=</span><span class="mf">1.16</span><span class="o">=</span><span class="n">h516909a_0</span>
+  <span class="o">-</span> <span class="n">liblapack</span><span class="o">=</span><span class="mf">3.9.0</span><span class="o">=</span><span class="mi">12</span><span class="n">_linux64_openblas</span>
+  <span class="o">-</span> <span class="n">liblapacke</span><span class="o">=</span><span class="mf">3.9.0</span><span class="o">=</span><span class="mi">12</span><span class="n">_linux64_openblas</span>
+  <span class="o">-</span> <span class="n">libllvm11</span><span class="o">=</span><span class="mf">11.1.0</span><span class="o">=</span><span class="n">hf817b99_2</span>
+  <span class="o">-</span> <span class="n">libmamba</span><span class="o">=</span><span class="mf">0.24.0</span><span class="o">=</span><span class="n">hd8a31e3_1</span>
+  <span class="o">-</span> <span class="n">libmambapy</span><span class="o">=</span><span class="mf">0.24.0</span><span class="o">=</span><span class="n">py38h923e62a_1</span>
+  <span class="o">-</span> <span class="n">libnghttp2</span><span class="o">=</span><span class="mf">1.47.0</span><span class="o">=</span><span class="n">h727a467_0</span>
+  <span class="o">-</span> <span class="n">libnsl</span><span class="o">=</span><span class="mf">2.0.0</span><span class="o">=</span><span class="n">h7f98852_0</span>
+  <span class="o">-</span> <span class="n">libopenblas</span><span class="o">=</span><span class="mf">0.3.18</span><span class="o">=</span><span class="n">pthreads_h8fe5266_0</span>
+  <span class="o">-</span> <span class="n">libprotobuf</span><span class="o">=</span><span class="mf">3.20.0</span><span class="o">=</span><span class="n">h6239696_0</span>
+  <span class="o">-</span> <span class="n">libsanitizer</span><span class="o">=</span><span class="mf">11.2.0</span><span class="o">=</span><span class="n">he4da1e4_15</span>
+  <span class="o">-</span> <span class="n">libsodium</span><span class="o">=</span><span class="mf">1.0.18</span><span class="o">=</span><span class="n">h36c2ea0_1</span>
+  <span class="o">-</span> <span class="n">libsolv</span><span class="o">=</span><span class="mf">0.7.22</span><span class="o">=</span><span class="n">h6239696_0</span>
+  <span class="o">-</span> <span class="n">libssh2</span><span class="o">=</span><span class="mf">1.10.0</span><span class="o">=</span><span class="n">ha56f1ee_2</span>
+  <span class="o">-</span> <span class="n">libstdcxx</span><span class="o">-</span><span class="n">ng</span><span class="o">=</span><span class="mf">12.1.0</span><span class="o">=</span><span class="n">ha89aaad_16</span>
+  <span class="o">-</span> <span class="n">libxml2</span><span class="o">=</span><span class="mf">2.9.14</span><span class="o">=</span><span class="n">h22db469_0</span>
+  <span class="o">-</span> <span class="n">libzlib</span><span class="o">=</span><span class="mf">1.2.11</span><span class="o">=</span><span class="n">h36c2ea0_1013</span>
+  <span class="o">-</span> <span class="n">llvmlite</span><span class="o">=</span><span class="mf">0.37.0</span><span class="o">=</span><span class="n">py38h4630a5e_1</span>
+  <span class="o">-</span> <span class="n">logmuse</span><span class="o">=</span><span class="mf">0.2.6</span><span class="o">=</span><span class="n">pyh8c360ce_0</span>
+  <span class="o">-</span> <span class="n">lz4</span><span class="o">-</span><span class="n">c</span><span class="o">=</span><span class="mf">1.9.3</span><span class="o">=</span><span class="n">h9c3ff4c_1</span>
+  <span class="o">-</span> <span class="n">lzo</span><span class="o">=</span><span class="mf">2.10</span><span class="o">=</span><span class="n">h516909a_1000</span>
+  <span class="o">-</span> <span class="n">mamba</span><span class="o">=</span><span class="mf">0.24.0</span><span class="o">=</span><span class="n">py38h1abaa86_1</span>
+  <span class="o">-</span> <span class="n">markupsafe</span><span class="o">=</span><span class="mf">2.1.1</span><span class="o">=</span><span class="n">py38h0a891b7_1</span>
+  <span class="o">-</span> <span class="n">multidict</span><span class="o">=</span><span class="mf">6.0.2</span><span class="o">=</span><span class="n">py38h0a891b7_1</span>
+  <span class="o">-</span> <span class="n">nbformat</span><span class="o">=</span><span class="mf">5.3.0</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">ncurses</span><span class="o">=</span><span class="mf">6.2</span><span class="o">=</span><span class="n">h58526e2_4</span>
+  <span class="o">-</span> <span class="n">nomkl</span><span class="o">=</span><span class="mf">1.0</span><span class="o">=</span><span class="n">h5ca1d4c_0</span>
+  <span class="o">-</span> <span class="n">numba</span><span class="o">=</span><span class="mf">0.54.1</span><span class="o">=</span><span class="n">py38h4bf6c61_0</span>
+  <span class="o">-</span> <span class="n">numpy</span><span class="o">=</span><span class="mf">1.20.3</span><span class="o">=</span><span class="n">py38h9894fe3_1</span>
+  <span class="o">-</span> <span class="n">oauth2client</span><span class="o">=</span><span class="mf">4.1.3</span><span class="o">=</span><span class="n">py_0</span>
+  <span class="o">-</span> <span class="n">openssl</span><span class="o">=</span><span class="mf">1.1.1</span><span class="n">p</span><span class="o">=</span><span class="n">h166bdaf_0</span>
+  <span class="o">-</span> <span class="n">packaging</span><span class="o">=</span><span class="mf">21.3</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">pandas</span><span class="o">=</span><span class="mf">1.4.0</span><span class="o">=</span><span class="n">py38h43a58ef_0</span>
+  <span class="o">-</span> <span class="n">parallel</span><span class="o">=</span><span class="mi">20211222</span><span class="o">=</span><span class="n">ha770c72_0</span>
+  <span class="o">-</span> <span class="n">paramiko</span><span class="o">=</span><span class="mf">2.10.3</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">peppy</span><span class="o">=</span><span class="mf">0.31.2</span><span class="o">=</span><span class="n">pyhd8ed1ab_2</span>
+  <span class="o">-</span> <span class="n">perl</span><span class="o">=</span><span class="mf">5.32.1</span><span class="o">=</span><span class="mi">1</span><span class="n">_h7f98852_perl5</span>
+  <span class="o">-</span> <span class="n">pip</span><span class="o">=</span><span class="mf">21.3.1</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">plac</span><span class="o">=</span><span class="mf">1.3.5</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">pluggy</span><span class="o">=</span><span class="mf">1.0.0</span><span class="o">=</span><span class="n">py38h578d9bd_3</span>
+  <span class="o">-</span> <span class="n">ply</span><span class="o">=</span><span class="mf">3.11</span><span class="o">=</span><span class="n">py_1</span>
+  <span class="o">-</span> <span class="n">prettytable</span><span class="o">=</span><span class="mf">3.2.0</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">protobuf</span><span class="o">=</span><span class="mf">3.20.0</span><span class="o">=</span><span class="n">py38hfa26641_4</span>
+  <span class="o">-</span> <span class="n">psutil</span><span class="o">=</span><span class="mf">5.9.0</span><span class="o">=</span><span class="n">py38h0a891b7_1</span>
+  <span class="o">-</span> <span class="n">pulp</span><span class="o">=</span><span class="mf">2.6.0</span><span class="o">=</span><span class="n">py38h578d9bd_1</span>
+  <span class="o">-</span> <span class="n">py</span><span class="o">=</span><span class="mf">1.11.0</span><span class="o">=</span><span class="n">pyh6c4a22f_0</span>
+  <span class="o">-</span> <span class="n">pyasn1</span><span class="o">=</span><span class="mf">0.4.8</span><span class="o">=</span><span class="n">py_0</span>
+  <span class="o">-</span> <span class="n">pyasn1</span><span class="o">-</span><span class="n">modules</span><span class="o">=</span><span class="mf">0.2.7</span><span class="o">=</span><span class="n">py_0</span>
+  <span class="o">-</span> <span class="n">pybind11</span><span class="o">-</span><span class="n">abi</span><span class="o">=</span><span class="mi">4</span><span class="o">=</span><span class="n">hd8ed1ab_3</span>
+  <span class="o">-</span> <span class="n">pycosat</span><span class="o">=</span><span class="mf">0.6.3</span><span class="o">=</span><span class="n">py38h0a891b7_1010</span>
+  <span class="o">-</span> <span class="n">pycparser</span><span class="o">=</span><span class="mf">2.21</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">pygments</span><span class="o">=</span><span class="mf">2.11.2</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">pynacl</span><span class="o">=</span><span class="mf">1.5.0</span><span class="o">=</span><span class="n">py38h0a891b7_1</span>
+  <span class="o">-</span> <span class="n">pyopenssl</span><span class="o">=</span><span class="mf">22.0.0</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">pyparsing</span><span class="o">=</span><span class="mf">3.0.8</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">pyrsistent</span><span class="o">=</span><span class="mf">0.18.1</span><span class="o">=</span><span class="n">py38h0a891b7_1</span>
+  <span class="o">-</span> <span class="n">pysftp</span><span class="o">=</span><span class="mf">0.2.9</span><span class="o">=</span><span class="n">py_1</span>
+  <span class="o">-</span> <span class="n">pysocks</span><span class="o">=</span><span class="mf">1.7.1</span><span class="o">=</span><span class="n">py38h578d9bd_5</span>
+  <span class="o">-</span> <span class="n">pytest</span><span class="o">=</span><span class="mf">7.1.1</span><span class="o">=</span><span class="n">py38h578d9bd_1</span>
+  <span class="o">-</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.8.12</span><span class="o">=</span><span class="n">hb7a2778_2_cpython</span>
+  <span class="o">-</span> <span class="n">python</span><span class="o">-</span><span class="n">dateutil</span><span class="o">=</span><span class="mf">2.8.2</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">python</span><span class="o">-</span><span class="n">fastjsonschema</span><span class="o">=</span><span class="mf">2.15.3</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">python</span><span class="o">-</span><span class="n">irodsclient</span><span class="o">=</span><span class="mf">1.1.3</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">python_abi</span><span class="o">=</span><span class="mf">3.8</span><span class="o">=</span><span class="mi">2</span><span class="n">_cp38</span>
+  <span class="o">-</span> <span class="n">pytz</span><span class="o">=</span><span class="mf">2021.3</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">pyu2f</span><span class="o">=</span><span class="mf">0.1.5</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">pyyaml</span><span class="o">=</span><span class="mf">6.0</span><span class="o">=</span><span class="n">py38h0a891b7_4</span>
+  <span class="o">-</span> <span class="n">ratelimiter</span><span class="o">=</span><span class="mf">1.2.0</span><span class="o">=</span><span class="n">py_1002</span>
+  <span class="o">-</span> <span class="n">readline</span><span class="o">=</span><span class="mf">8.1</span><span class="o">=</span><span class="n">h46c0cb4_0</span>
+  <span class="o">-</span> <span class="n">reproc</span><span class="o">=</span><span class="mf">14.2.4</span><span class="o">=</span><span class="n">h295c915_1</span>
+  <span class="o">-</span> <span class="n">reproc</span><span class="o">-</span><span class="n">cpp</span><span class="o">=</span><span class="mf">14.2.4</span><span class="o">=</span><span class="n">h295c915_1</span>
+  <span class="o">-</span> <span class="n">requests</span><span class="o">=</span><span class="mf">2.27.1</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">retry</span><span class="o">=</span><span class="mf">0.9.2</span><span class="o">=</span><span class="n">py_0</span>
+  <span class="o">-</span> <span class="n">rsa</span><span class="o">=</span><span class="mf">4.8</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">ruamel_yaml</span><span class="o">=</span><span class="mf">0.15.100</span><span class="o">=</span><span class="n">py38h27cfd23_0</span>
+  <span class="o">-</span> <span class="n">rust</span><span class="o">=</span><span class="mf">1.59.0</span><span class="o">=</span><span class="n">h30be4a0_0</span>
+  <span class="o">-</span> <span class="n">rust</span><span class="o">-</span><span class="n">std</span><span class="o">-</span><span class="n">x86_64</span><span class="o">-</span><span class="n">unknown</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="o">=</span><span class="mf">1.59.0</span><span class="o">=</span><span class="n">hc1431ca_0</span>
+  <span class="o">-</span> <span class="n">s3transfer</span><span class="o">=</span><span class="mf">0.5.2</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">samtools</span><span class="o">=</span><span class="mf">1.3.1</span><span class="o">=</span><span class="mi">0</span>
+  <span class="o">-</span> <span class="n">scikit</span><span class="o">-</span><span class="n">learn</span><span class="o">=</span><span class="mf">1.0.2</span><span class="o">=</span><span class="n">py38h1561384_0</span>
+  <span class="o">-</span> <span class="n">scipy</span><span class="o">=</span><span class="mf">1.7.3</span><span class="o">=</span><span class="n">py38h56a6a73_0</span>
+  <span class="o">-</span> <span class="n">setuptools</span><span class="o">=</span><span class="mf">60.9.3</span><span class="o">=</span><span class="n">py38h578d9bd_0</span>
+  <span class="o">-</span> <span class="n">six</span><span class="o">=</span><span class="mf">1.16.0</span><span class="o">=</span><span class="n">pyh6c4a22f_0</span>
+  <span class="o">-</span> <span class="n">slacker</span><span class="o">=</span><span class="mf">0.14.0</span><span class="o">=</span><span class="n">py_0</span>
+  <span class="o">-</span> <span class="n">smart_open</span><span class="o">=</span><span class="mf">5.2.1</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">smmap</span><span class="o">=</span><span class="mf">3.0.5</span><span class="o">=</span><span class="n">pyh44b312d_0</span>
+  <span class="o">-</span> <span class="n">snakemake</span><span class="o">=</span><span class="mf">7.3.8</span><span class="o">=</span><span class="n">hdfd78af_0</span>
+  <span class="o">-</span> <span class="n">snakemake</span><span class="o">-</span><span class="n">minimal</span><span class="o">=</span><span class="mf">7.3.8</span><span class="o">=</span><span class="n">pyhdfd78af_0</span>
+  <span class="o">-</span> <span class="n">sqlite</span><span class="o">=</span><span class="mf">3.37.0</span><span class="o">=</span><span class="n">h9cd32fc_0</span>
+  <span class="o">-</span> <span class="n">stone</span><span class="o">=</span><span class="mf">3.3.1</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">stopit</span><span class="o">=</span><span class="mf">1.1.2</span><span class="o">=</span><span class="n">py_0</span>
+  <span class="o">-</span> <span class="n">sysroot_linux</span><span class="o">-</span><span class="mi">64</span><span class="o">=</span><span class="mf">2.12</span><span class="o">=</span><span class="n">he073ed8_15</span>
+  <span class="o">-</span> <span class="n">tabix</span><span class="o">=</span><span class="mf">1.11</span><span class="o">=</span><span class="n">hdfd78af_0</span>
+  <span class="o">-</span> <span class="n">tabixpp</span><span class="o">=</span><span class="mf">1.1.0</span><span class="o">=</span><span class="n">he28291e_6</span>
+  <span class="o">-</span> <span class="n">tabulate</span><span class="o">=</span><span class="mf">0.8.9</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">threadpoolctl</span><span class="o">=</span><span class="mf">3.0.0</span><span class="o">=</span><span class="n">pyh8a188c0_0</span>
+  <span class="o">-</span> <span class="n">tk</span><span class="o">=</span><span class="mf">8.6.11</span><span class="o">=</span><span class="n">h27826a3_1</span>
+  <span class="o">-</span> <span class="n">tomli</span><span class="o">=</span><span class="mf">2.0.1</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">toposort</span><span class="o">=</span><span class="mf">1.7</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">tqdm</span><span class="o">=</span><span class="mf">4.62.3</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">traitlets</span><span class="o">=</span><span class="mf">5.1.1</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">typing</span><span class="o">-</span><span class="n">extensions</span><span class="o">=</span><span class="mf">4.1.1</span><span class="o">=</span><span class="n">hd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">typing_extensions</span><span class="o">=</span><span class="mf">4.1.1</span><span class="o">=</span><span class="n">pyha770c72_0</span>
+  <span class="o">-</span> <span class="n">ubiquerg</span><span class="o">=</span><span class="mf">0.6.1</span><span class="o">=</span><span class="n">pyh9f0ad1d_0</span>
+  <span class="o">-</span> <span class="n">uritemplate</span><span class="o">=</span><span class="mf">4.1.1</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">urllib3</span><span class="o">=</span><span class="mf">1.26.9</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">vartrix</span><span class="o">=</span><span class="mf">1.1.22</span><span class="o">=</span><span class="n">h27ee8bf_0</span>
+  <span class="o">-</span> <span class="n">vcflib</span><span class="o">=</span><span class="mf">1.0.2</span><span class="o">=</span><span class="n">h3198e80_5</span>
+  <span class="o">-</span> <span class="n">veracitools</span><span class="o">=</span><span class="mf">0.1.3</span><span class="o">=</span><span class="n">py_0</span>
+  <span class="o">-</span> <span class="n">wcwidth</span><span class="o">=</span><span class="mf">0.2.5</span><span class="o">=</span><span class="n">pyh9f0ad1d_2</span>
+  <span class="o">-</span> <span class="n">wheel</span><span class="o">=</span><span class="mf">0.37.1</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">wrapt</span><span class="o">=</span><span class="mf">1.14.0</span><span class="o">=</span><span class="n">py38h0a891b7_1</span>
+  <span class="o">-</span> <span class="n">xz</span><span class="o">=</span><span class="mf">5.2.5</span><span class="o">=</span><span class="n">h516909a_1</span>
+  <span class="o">-</span> <span class="n">yaml</span><span class="o">=</span><span class="mf">0.2.5</span><span class="o">=</span><span class="n">h7f98852_2</span>
+  <span class="o">-</span> <span class="n">yaml</span><span class="o">-</span><span class="n">cpp</span><span class="o">=</span><span class="mf">0.7.0</span><span class="o">=</span><span class="n">h27087fc_1</span>
+  <span class="o">-</span> <span class="n">yarl</span><span class="o">=</span><span class="mf">1.7.2</span><span class="o">=</span><span class="n">py38h0a891b7_2</span>
+  <span class="o">-</span> <span class="n">yte</span><span class="o">=</span><span class="mf">1.2.1</span><span class="o">=</span><span class="n">py38h578d9bd_0</span>
+  <span class="o">-</span> <span class="n">zipp</span><span class="o">=</span><span class="mf">3.8.0</span><span class="o">=</span><span class="n">pyhd8ed1ab_0</span>
+  <span class="o">-</span> <span class="n">zlib</span><span class="o">=</span><span class="mf">1.2.11</span><span class="o">=</span><span class="n">h36c2ea0_1013</span>
+  <span class="o">-</span> <span class="n">zstd</span><span class="o">=</span><span class="mf">1.5.2</span><span class="o">=</span><span class="n">h8a70e8d_1</span>
+<span class="n">prefix</span><span class="p">:</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">rotate</span><span class="o">/</span><span class="n">anaconda3</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">scavengers</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>After you cloned the repository, you can run scAVENGERS by executing the command below.</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$SCAVENGERS_DIRECTORY/scAVENGERS [pipeline|cluster] [options]
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Seungbeom Han.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

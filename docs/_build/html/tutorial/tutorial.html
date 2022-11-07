@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tutorial: demultiplexing prefrontal cortex scATAC-seq data &mdash; scAVENGERS 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> scAVENGERS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Tutorial: demultiplexing prefrontal cortex scATAC-seq data</a><ul>
+<li><a class="reference internal" href="#downloading-the-data">Downloading the data</a><ul>
+<li><a class="reference internal" href="#executing-scavengers">Executing scAVENGERS</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scAVENGERS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Tutorial: demultiplexing prefrontal cortex scATAC-seq data</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorial/tutorial.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tutorial-demultiplexing-prefrontal-cortex-scatac-seq-data">
+<h1>Tutorial: demultiplexing prefrontal cortex scATAC-seq data<a class="headerlink" href="#tutorial-demultiplexing-prefrontal-cortex-scatac-seq-data" title="Permalink to this heading"></a></h1>
+<p>We prepared prefrontal cortex scATAC-seq (PRJNA729525) synthetic mixture data for users who are new to scAVENGERS. We extracted half of chromosme 1 due to the memory issue. Thus, the clustering performance is inevitably low, so that most of the call barcodes will be unassigned.</p>
+<section id="downloading-the-data">
+<h2>Downloading the data<a class="headerlink" href="#downloading-the-data" title="Permalink to this heading"></a></h2>
+<p>The data will be prepared after running the script below. The directory <code class="docutils literal notranslate"><span class="pre">scAVENGERS_example</span></code> is where the data are in. Note that the genome fasta file must be decompressed. If the genome fasta file is not decompressed, the whole pipeline will halt when running vartrix.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">junglab</span><span class="o">.</span><span class="n">kaist</span><span class="o">.</span><span class="n">ac</span><span class="o">.</span><span class="n">kr</span><span class="o">/</span><span class="n">Dataset</span><span class="o">/</span><span class="n">scAVENGERS_example</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">tar</span> <span class="o">-</span><span class="n">xvf</span> <span class="n">scAVENGERS_example</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">cd</span> <span class="n">scAVENGERS_example</span>
+<span class="n">gzip</span> <span class="o">-</span><span class="n">d</span> <span class="n">genome</span><span class="o">.</span><span class="n">fa</span><span class="o">.</span><span class="n">gz</span>
+</pre></div>
+</div>
+<section id="executing-scavengers">
+<h3>Executing scAVENGERS<a class="headerlink" href="#executing-scavengers" title="Permalink to this heading"></a></h3>
+<p>After setting your current directory into <code class="docutils literal notranslate"><span class="pre">scAVENGERS_example</span></code>, running <code class="docutils literal notranslate"><span class="pre">scAVENGERS</span> <span class="pre">pipeline</span></code> will produce results under the directory named <code class="docutils literal notranslate"><span class="pre">outdir</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scAVENGERS</span> <span class="n">pipeline</span> <span class="o">-</span><span class="n">j</span> <span class="mi">10</span> <span class="o">--</span><span class="n">configfile</span> <span class="n">config</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Seungbeom Han.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scAVENGERS pipeline: running the whole pipeline for demultiplexing scATAC-seq data &mdash; scAVENGERS 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> scAVENGERS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">scAVENGERS pipeline: running the whole pipeline for demultiplexing scATAC-seq data</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#configuration-file">Configuration file</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scAVENGERS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">scAVENGERS pipeline: running the whole pipeline for demultiplexing scATAC-seq data</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/scavengers_modules/scAVENGERS_pipeline.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="scavengers-pipeline-running-the-whole-pipeline-for-demultiplexing-scatac-seq-data">
+<h1>scAVENGERS pipeline: running the whole pipeline for demultiplexing scATAC-seq data<a class="headerlink" href="#scavengers-pipeline-running-the-whole-pipeline-for-demultiplexing-scatac-seq-data" title="Permalink to this heading"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">scAVENGERS</span> <span class="pre">pipeline</span></code> is a wrapper script that runs variant calling, allele count matrix generation, and demultiplexing at once. The pipeline is implemented in snakemake (https://snakemake.github.io/), which is a workflow management system. The pipeline is executed by running the command below.</p>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
+<p>To run scAVENGERS pipeline, you must provide path of the configuration file and number of jobs to use as <code class="docutils literal notranslate"><span class="pre">--configfile</span></code> and <code class="docutils literal notranslate"><span class="pre">--jobs</span></code> options respectively.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>scAVENGERS pipeline --configfile config.yaml -j $THREADS
+</pre></div>
+</div>
+<p>The final result is given as a tab-seperated file <code class="docutils literal notranslate"><span class="pre">clusters.tsv</span></code> in the output directory. The structure of the result is in the table below.</p>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>column name</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>barcode</p></td>
+<td><p>barcode sequence</p></td>
+</tr>
+<tr class="row-odd"><td><p>status</p></td>
+<td><p>status of the barcode sequence: singlet or doublet</p></td>
+</tr>
+<tr class="row-even"><td><p>assignment</p></td>
+<td><p>cluster number where the barcode is assigned. Doublets are expressed in a form {n}/{n}.</p></td>
+</tr>
+<tr class="row-odd"><td><p>log_prob_singleton</p></td>
+<td><p>log singleton probability calculated by troublet</p></td>
+</tr>
+<tr class="row-even"><td><p>log_prob_doublet</p></td>
+<td><p>log doublet probabilty calculated by troublet</p></td>
+</tr>
+<tr class="row-odd"><td><p>cluster{n}</p></td>
+<td><p>log likelihood of the assignment on cluster n.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="configuration-file">
+<h2>Configuration file<a class="headerlink" href="#configuration-file" title="Permalink to this heading"></a></h2>
+<p>Through configuration file, you can set parameters for each step. The configuration below is provided in <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> in the scAVENGERS repository.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># number of threads to use</span>
+<span class="c1"># to make this valid, you must set the number of cores when running snakemake pipeline.</span>
+<span class="c1"># e.g. -j 10</span>
+<span class="n">THREADS</span><span class="p">:</span> <span class="mi">10</span>
+
+<span class="c1"># input and output data path</span>
+<span class="n">DATA</span><span class="p">:</span>
+  <span class="c1"># path to directory for saving output files</span>
+  <span class="n">out_dir</span><span class="p">:</span>
+    <span class="n">outdir</span>
+  <span class="c1"># path to genome sequence file. SHOULD NOT be compressed.</span>
+  <span class="n">genome</span><span class="p">:</span>
+    <span class="n">genome</span><span class="o">.</span><span class="n">fa</span>
+  <span class="c1"># path to alignment file</span>
+  <span class="n">alignment</span><span class="p">:</span>
+    <span class="n">alignment</span><span class="o">.</span><span class="n">bam</span>
+  <span class="c1"># path to text file containing line-seperated list of barcodes</span>
+  <span class="n">barcode</span><span class="p">:</span>
+    <span class="n">barcodes</span><span class="o">.</span><span class="n">txt</span>
+
+<span class="c1"># cluster.py settings</span>
+<span class="n">CLUSTER</span><span class="p">:</span>
+  <span class="c1"># number of genotypes in multiplexed sample</span>
+  <span class="n">n_genotypes</span><span class="p">:</span> <span class="mi">10</span>
+  <span class="c1"># ploidy of the organism of interest</span>
+  <span class="n">ploidy</span><span class="p">:</span> <span class="mi">2</span>
+  <span class="c1"># error rate correction parameter of probability model</span>
+  <span class="n">err_rate</span><span class="p">:</span> <span class="mf">0.001</span>
+  <span class="c1"># difference of likelihood to stop the iteration</span>
+  <span class="n">stop_criterion</span><span class="p">:</span> <span class="mf">0.1</span>
+  <span class="c1"># maximum number of iteration</span>
+  <span class="n">max_iter</span><span class="p">:</span> <span class="mi">1000</span>
+
+<span class="c1"># variant caller settings</span>
+<span class="n">VARIANT_CALLER</span><span class="p">:</span>
+  <span class="c1"># variant caller to use. Choose &quot;freebayes&quot; or &quot;strelka.&quot;</span>
+  <span class="n">caller</span><span class="p">:</span> <span class="s2">&quot;strelka&quot;</span>
+  <span class="c1"># minimum quality score of variant, used only if the caller is &quot;freebayes&quot;</span>
+  <span class="n">min_qual</span><span class="p">:</span> <span class="mi">0</span>
+  <span class="c1"># whether to use low-GQX variants only, used only if the caller is &quot;strelka&quot;</span>
+  <span class="n">lowgqx</span><span class="p">:</span> <span class="kc">False</span>
+
+<span class="c1"># vartrix settings</span>
+<span class="n">VARTRIX</span><span class="p">:</span>
+  <span class="c1"># minimum mapping quality of read to use in vartrix</span>
+  <span class="n">mapq</span><span class="p">:</span> <span class="mi">30</span>
+
+<span class="c1"># troublet settings</span>
+<span class="n">TROUBLET</span><span class="p">:</span>
+  <span class="c1"># doublet prior</span>
+  <span class="n">doublet_prior</span><span class="p">:</span> <span class="mf">0.5</span>
+  <span class="c1"># doublet posterior threshold</span>
+  <span class="n">doublet_threshold</span><span class="p">:</span> <span class="mf">0.9</span>
+  <span class="c1"># singlet posterior threshold</span>
+  <span class="n">singlet_threshold</span><span class="p">:</span> <span class="mf">0.9</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Seungbeom Han.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
