@@ -1,4 +1,5 @@
 # scAVENGERS
+[![Documentation Status](https://readthedocs.org/projects/scavengers/badge/?version=latest)](https://scavengers.readthedocs.io/en/latest/?badge=latest)
 
 ## Overview
 scAVENGERS demultiplexes snATAC-seq data by genotype, referring to the variant information.
@@ -14,17 +15,14 @@ conda env create -f scAVENGERS/envs/environment.yml
 ### 2. Setting parameters for scAVENGERS pipeline
 Via config file in yaml format, you can set parameters for the execution of pipeline. The parameters include path of the input and output data and settings for each program in the pipeline. The format is provided in `config.yaml`. 
 
-### 4. Running scAVENGERS pipeline
-The below is a command to run scAVENGERS with 10 jobs. To note, you must also set `THREADS` argument in config file in adequate value to run with intended number of jobs. With the arguments, the whole pipeline for demultiplexing will be executed. scAVENGERS require an indexed alignment file, an indexed reference genome file and a line-seperated list of barcode sequences in a text file.
+### 3. Running scAVENGERS pipeline
+The below is a command to run whole pipeline for demultiplexing. scAVENGERS require an indexed alignment file, an indexed reference genome file and a line-seperated list of barcode sequences in a text file.
 ```
 conda activate scavengers
-# Run scAVENGERS pipeline
 scAVENGERS pipeline --configfile config.yaml -j $THREADS
-# or run scAVENGERS cluster
-scAVENGERS cluster -a alt.mtx -r ref.mtx -b barcodes.txt -o clusters.tsv
 ```
 
-### 5. Accessing the result
+### 4. Accessing the result
 Running scAVENGERS pipeline results to a tab-delimited file. This result file `clusters.tsv` is structured like below. To note, the format is compatitible with the cluster result file generated from souporcell (https://github.com/wheaton5/souporcell).
 
 |column name|description|
