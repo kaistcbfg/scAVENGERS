@@ -8,7 +8,8 @@ scAVENGERS demultiplexes snATAC-seq data by genotype, referring to the variant i
 ### 1. Installation
 The command below clones the repository and install dependencies.
 ```
-git clone https://github.com/kaistcbfg/scAVENGERS
+wget https://github.com/kaistcbfg/scAVENGERS/archive/refs/tags/v0.1.0.tar.gz
+tar -xvzf v0.1.0.tar.gz
 conda env create -f scAVENGERS/envs/environment.yml
 ```
 

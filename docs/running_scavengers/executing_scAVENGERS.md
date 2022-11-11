@@ -5,7 +5,7 @@
 The whole pipeline is executed by running the command below.
 ```
 conda activate scavengers
-scAVENGERS pipeline --configfile config.yaml -j $THREADS
+$scAVENGERS_DIRECTORY/scAVENGERS pipeline --configfile config.yaml -j $THREADS
 ```
 ### Preparing data
 Alignment file in bam format and line-seperated list of barcodes in text file are required to run scAVENGERS.
@@ -21,7 +21,7 @@ The configuration file is provided in `config.yaml` in scAVENGERS repository.
 The demultiplexing module `scAVENGERS cluster` is executed by running the command below.
 ```
 conda activate scavengers
-scAVENGERS cluster -a alt.mtx -r ref.mtx -b barcodes.txt -o clusters.tsv
+$scAVENGERS_DIRECTORY/scAVENGERS cluster -a alt.mtx -r ref.mtx -b barcodes.txt -o clusters.tsv
 ```
 ### Preparing data
 `scAVENGERS cluster` requires three inputs: count matrices for alternative and reference alleles in .mtx format, and a line-seperated list of barcodes in text file.

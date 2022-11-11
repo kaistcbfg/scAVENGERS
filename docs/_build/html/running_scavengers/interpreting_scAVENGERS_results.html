@@ -17,9 +17,13 @@
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
+        <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="scAVENGERS pipeline: running the whole pipeline for demultiplexing scATAC-seq data" href="../scavengers_modules/scAVENGERS_pipeline.html" />
+    <link rel="prev" title="Executing scAVENGERS" href="executing_scAVENGERS.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -37,14 +41,25 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Interpreting scAVENGERS results</a><ul>
-<li><a class="reference internal" href="#donor-assignment">Donor assignment</a></li>
+              <p class="caption" role="heading"><span class="caption-text">Running scAVENGERS</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installing_scAVENGERS.html">Installing scAVENGERS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="executing_scAVENGERS.html">Executing scAVENGERS</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Interpreting scAVENGERS results</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#donor-assignment">Donor assignment</a></li>
 </ul>
 </li>
 </ul>
-</div>
+<p class="caption" role="heading"><span class="caption-text">scAVENGERS modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scavengers_modules/scAVENGERS_pipeline.html">scAVENGERS pipeline: running the whole pipeline for demultiplexing scATAC-seq data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scavengers_modules/scAVENGERS_cluster.html">scAVENGERS cluster: demultiplexing scATAC-seq data</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorial: demultiplexing synthetic human prefrontal cortex scATAC-seq mixture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial.html">Tutorial: demultiplexing prefrontal cortex scATAC-seq data</a></li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -69,13 +84,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="interpreting-scavengers-results">
+  <section class="tex2jax_ignore mathjax_ignore" id="interpreting-scavengers-results">
 <h1>Interpreting scAVENGERS results<a class="headerlink" href="#interpreting-scavengers-results" title="Permalink to this heading"></a></h1>
 <p>The demultiplexing result after running <code class="docutils literal notranslate"><span class="pre">scAVENGERS</span> <span class="pre">pipeline</span></code> or <code class="docutils literal notranslate"><span class="pre">scAVENGERS</span> <span class="pre">cluster</span></code> provides the cluster assigned and likelihood to be assigned to each cluster for each barcode.</p>
 <section id="donor-assignment">
 <h2>Donor assignment<a class="headerlink" href="#donor-assignment" title="Permalink to this heading"></a></h2>
 <p>Because scAVENGERS is unsupervised, the clustering result itself is insufficient to discriminate which donor is the barcode from. If you have reference variants for each donor, you can compare the variants generated from scAVENGERS pipeline against these reference variants. The formula below can be a metric to assign donor to cluster.</p>
-<p>${Score}<em>{reference}=\frac{N({Variants}</em>{generated} \cap {Variants}<em>{reference})}{N({Variants}</em>{generated})}$</p>
+<p><span class="math notranslate nohighlight">\({Score}_{reference}=\frac{N({Variants}_{generated} \cap {Variants}_{reference})}{N({Variants}_{generated})}\)</span></p>
 <p>One thing to be careful is that a signinificant number of variants which can distinguish donors are low-quality variants. Therefore you should not filter out low-quality variants from the variants generated from scAVENGERS pipeline.</p>
 </section>
 </section>
@@ -83,7 +98,10 @@
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="executing_scAVENGERS.html" class="btn btn-neutral float-left" title="Executing scAVENGERS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../scavengers_modules/scAVENGERS_pipeline.html" class="btn btn-neutral float-right" title="scAVENGERS pipeline: running the whole pipeline for demultiplexing scATAC-seq data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

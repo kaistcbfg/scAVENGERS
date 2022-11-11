@@ -19,7 +19,9 @@
         <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Executing scAVENGERS" href="executing_scAVENGERS.html" />
+    <link rel="prev" title="scAVENGERS" href="../index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -37,20 +39,31 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Installing scAVENGERS</a><ul>
-<li><a class="reference internal" href="#installation">Installation</a></li>
-<li><a class="reference internal" href="#requirements">Requirements</a><ul>
-<li><a class="reference internal" href="#external-tools">External tools</a></li>
-<li><a class="reference internal" href="#python-and-its-packages">Python and its packages</a></li>
-<li><a class="reference internal" href="#rust">Rust</a></li>
+              <p class="caption" role="heading"><span class="caption-text">Running scAVENGERS</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installing scAVENGERS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#external-tools">External tools</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#python-and-its-packages">Python and its packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rust">Rust</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="executing_scAVENGERS.html">Executing scAVENGERS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interpreting_scAVENGERS_results.html">Interpreting scAVENGERS results</a></li>
 </ul>
-</div>
+<p class="caption" role="heading"><span class="caption-text">scAVENGERS modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scavengers_modules/scAVENGERS_pipeline.html">scAVENGERS pipeline: running the whole pipeline for demultiplexing scATAC-seq data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scavengers_modules/scAVENGERS_cluster.html">scAVENGERS cluster: demultiplexing scATAC-seq data</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorial: demultiplexing synthetic human prefrontal cortex scATAC-seq mixture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial.html">Tutorial: demultiplexing prefrontal cortex scATAC-seq data</a></li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -75,12 +88,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="installing-scavengers">
+  <section class="tex2jax_ignore mathjax_ignore" id="installing-scavengers">
 <h1>Installing scAVENGERS<a class="headerlink" href="#installing-scavengers" title="Permalink to this heading"></a></h1>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
 <p>The required softwares and packages are provided as a conda environment. Conda (https://www.anaconda.com/products/distribution) helps users to manage multiple packages easily. Running below will clone scAVENGERS repository create an environment named ‘scavengers.’</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">kaistcbfg</span><span class="o">/</span><span class="n">scAVENGERS</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">kaistcbfg</span><span class="o">/</span><span class="n">scAVENGERS</span><span class="o">/</span><span class="n">archive</span><span class="o">/</span><span class="n">refs</span><span class="o">/</span><span class="n">tags</span><span class="o">/</span><span class="n">v0</span><span class="mf">.1.0</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">tar</span> <span class="o">-</span><span class="n">xvzf</span> <span class="n">v0</span><span class="mf">.1.0</span><span class="o">.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
 <span class="n">conda</span> <span class="n">env</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">scAVENGERS</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">environment</span><span class="o">.</span><span class="n">yaml</span>
 </pre></div>
 </div>
@@ -417,7 +431,10 @@
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="scAVENGERS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="executing_scAVENGERS.html" class="btn btn-neutral float-right" title="Executing scAVENGERS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

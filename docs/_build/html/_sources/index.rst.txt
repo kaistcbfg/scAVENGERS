@@ -14,7 +14,8 @@ Running scAVENGERS
 
 .. code-block::
 
-   git clone https://github.com/kaistcbfg/scAVENGERS
+   wget https://github.com/kaistcbfg/scAVENGERS/archive/refs/tags/v0.1.0.tar.gz
+   tar -xvzf v0.1.0.tar.gz
    conda env create -f scAVENGERS/envs/environment.yaml
 
 2. After you cloned the repository, you can run scAVENGERS by executing the command below.

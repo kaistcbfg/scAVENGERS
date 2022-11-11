@@ -19,7 +19,9 @@
         <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Interpreting scAVENGERS results" href="interpreting_scAVENGERS_results.html" />
+    <link rel="prev" title="Installing scAVENGERS" href="installing_scAVENGERS.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -37,24 +39,35 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Executing scAVENGERS</a><ul>
-<li><a class="reference internal" href="#running-the-whole-pipeline">Running the whole pipeline</a><ul>
-<li><a class="reference internal" href="#execution">Execution</a></li>
-<li><a class="reference internal" href="#preparing-data">Preparing data</a></li>
-<li><a class="reference internal" href="#configuring">Configuring</a></li>
+              <p class="caption" role="heading"><span class="caption-text">Running scAVENGERS</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installing_scAVENGERS.html">Installing scAVENGERS</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Executing scAVENGERS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-whole-pipeline">Running the whole pipeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#execution">Execution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preparing-data">Preparing data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuring">Configuring</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#running-the-demultiplexing-module">Running the demultiplexing module</a><ul>
-<li><a class="reference internal" href="#id1">Preparing data</a></li>
-<li><a class="reference internal" href="#id2">Configuring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-demultiplexing-module">Running the demultiplexing module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Preparing data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Configuring</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="interpreting_scAVENGERS_results.html">Interpreting scAVENGERS results</a></li>
 </ul>
-</div>
+<p class="caption" role="heading"><span class="caption-text">scAVENGERS modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../scavengers_modules/scAVENGERS_pipeline.html">scAVENGERS pipeline: running the whole pipeline for demultiplexing scATAC-seq data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../scavengers_modules/scAVENGERS_cluster.html">scAVENGERS cluster: demultiplexing scATAC-seq data</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorial: demultiplexing synthetic human prefrontal cortex scATAC-seq mixture</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/tutorial.html">Tutorial: demultiplexing prefrontal cortex scATAC-seq data</a></li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -79,7 +92,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="executing-scavengers">
+  <section class="tex2jax_ignore mathjax_ignore" id="executing-scavengers">
 <h1>Executing scAVENGERS<a class="headerlink" href="#executing-scavengers" title="Permalink to this heading"></a></h1>
 <section id="running-the-whole-pipeline">
 <h2>Running the whole pipeline<a class="headerlink" href="#running-the-whole-pipeline" title="Permalink to this heading"></a></h2>
@@ -87,7 +100,7 @@
 <h3>Execution<a class="headerlink" href="#execution" title="Permalink to this heading"></a></h3>
 <p>The whole pipeline is executed by running the command below.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>conda activate scavengers
-scAVENGERS pipeline --configfile config.yaml -j $THREADS
+$scAVENGERS_DIRECTORY/scAVENGERS pipeline --configfile config.yaml -j $THREADS
 </pre></div>
 </div>
 </section>
@@ -108,8 +121,8 @@ scAVENGERS pipeline --configfile config.yaml -j $THREADS
 <section id="running-the-demultiplexing-module">
 <h2>Running the demultiplexing module<a class="headerlink" href="#running-the-demultiplexing-module" title="Permalink to this heading"></a></h2>
 <p>The demultiplexing module <code class="docutils literal notranslate"><span class="pre">scAVENGERS</span> <span class="pre">cluster</span></code> is executed by running the command below.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">activate</span> <span class="n">scavengers</span>
-<span class="n">scAVENGERS</span> <span class="n">cluster</span> <span class="o">-</span><span class="n">a</span> <span class="n">alt</span><span class="o">.</span><span class="n">mtx</span> <span class="o">-</span><span class="n">r</span> <span class="n">ref</span><span class="o">.</span><span class="n">mtx</span> <span class="o">-</span><span class="n">b</span> <span class="n">barcodes</span><span class="o">.</span><span class="n">txt</span> <span class="o">-</span><span class="n">o</span> <span class="n">clusters</span><span class="o">.</span><span class="n">tsv</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>conda activate scavengers
+$scAVENGERS_DIRECTORY/scAVENGERS cluster -a alt.mtx -r ref.mtx -b barcodes.txt -o clusters.tsv
 </pre></div>
 </div>
 <section id="id1">
@@ -136,7 +149,10 @@ scAVENGERS pipeline --configfile config.yaml -j $THREADS
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installing_scAVENGERS.html" class="btn btn-neutral float-left" title="Installing scAVENGERS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="interpreting_scAVENGERS_results.html" class="btn btn-neutral float-right" title="Interpreting scAVENGERS results" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
