@@ -52,7 +52,7 @@ scAVENGERS provides some modules to aid demultiplexing single cell DNA sequencin
    scavengers_modules/scAVENGERS_cluster.md
 
 .. toctree::
-   :caption: Tutorial: demultiplexing synthetic human prefrontal cortex scATAC-seq mixture
+   :caption: Tutorial
    :maxdepth: 1
    :hidden:
 
