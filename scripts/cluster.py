@@ -294,7 +294,7 @@ def cluster(args):
     ref_matrix = mmread(args.ref).astype(np.int64).tocsr()
     alt_matrix = mmread(args.alt).astype(np.int64).tocsr()
     variant_occurences = binarize(ref_matrix + alt_matrix).sum(axis=1).A1
-    variant_indices = np.where(variant_occurences > 10)[0]
+    variant_indices = np.where(variant_occurences > args.coverage)[0]
     ref_matrix = ref_matrix[variant_indices]
     alt_matrix = alt_matrix[variant_indices]
     print(
@@ -348,12 +348,10 @@ def cluster(args):
     assignment = np.argmax(max_likelihood_matrix, axis=1).reshape(-1, 1)
     cluster_info = pd.DataFrame(max_likelihood_matrix, index=barcodes)
     cluster_info.insert(0, "assignment", assignment)
-    outfile = (
-        os.path.abspath(args.output) + "/clusters_tmp.tsv"
-        if args.output is not None
-        else sys.stdout()
-    )
-    cluster_info.to_csv(outfile, header=None, sep="\t")
+
+    cluster_info.to_csv(os.path.abspath(args.output) + "/clusters.tsv", header=None, sep="\t")
+    np.savez_compressed(os.path.abspath(args.output) + "/gt_matrix", real_count_matrix)
+    np.savez_compressed(os.path.abspath(args.output) + "/variant_index", variant_indices)
 
 
 if __name__ == "__main__":
@@ -385,7 +383,6 @@ if __name__ == "__main__":
         "--output",
         required=True,
         type=str,
-        default=None,
         help="Output directory.",
     )
     parser.add_argument(
@@ -401,6 +398,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--ploidy", default=2, type=int, help="Ploidy. Defaults to 2."
     )
+    parser.add_argument("--coverage", default=10, type=int, help="Minimum coverage of variant to use for clustering")
     parser.add_argument(
         "--err_rate",
         default=0.001,
