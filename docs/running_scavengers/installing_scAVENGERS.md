@@ -256,7 +256,3 @@ dependencies:
   - zstd=1.5.2=h8a70e8d_1
 prefix: /home/rotate/anaconda3/envs/scavengers
 ```
-2. After you cloned the repository, you can run scAVENGERS by executing the command below.
-```
-$SCAVENGERS_DIRECTORY/scAVENGERS [pipeline|cluster] [options]
-```
