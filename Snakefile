@@ -7,7 +7,9 @@ THREADS = config["THREADS"]
 
 rule all:
     input:
-        f"{OUTDIR}/clusters.tsv",
+        f"{OUTDIR}/clusters.final.tsv",
+        f"{OUTDIR}/gt_matrix.npz",
+        f"{OUTDIR}/variant_index.npz",
         f"{OUTDIR}/ambient_rna.txt",
         f"{OUTDIR}/cluster_genotypes.vcf"
 
@@ -85,7 +87,9 @@ rule make_clusters:
         vcf = f"{OUTDIR}/variants.vcf.gz",
         barcode = config["DATA"]["barcode"]
     output:
-        f"{OUTDIR}/clusters_tmp.tsv"
+        f"{OUTDIR}/clusters.tsv",
+        f"{OUTDIR}/gt_matrix.npz",
+        f"{OUTDIR}/variant_index.npz",
     params:
         k = config["CLUSTER"]["n_genotypes"],
         ploidy = config["CLUSTER"]["ploidy"],
@@ -106,10 +110,10 @@ rule call_doublets:
     input:
         ref = f"{OUTDIR}/ref.mtx",
         alt = f"{OUTDIR}/alt.mtx",
-        cluster = f"{OUTDIR}/clusters_tmp.tsv",
+        cluster = f"{OUTDIR}/clusters.tsv",
         troublet = f"{SNAKEDIR}/troublet"
     output:
-        f"{OUTDIR}/clusters.tsv"
+        f"{OUTDIR}/clusters.final.tsv"
     params:
         doublet_prior = config["TROUBLET"]["doublet_prior"],
         doublet_threshold = config["TROUBLET"]["doublet_threshold"],
@@ -122,12 +126,13 @@ rule call_doublets:
             "--singlet_threshold {params.singlet_threshold} > {output}"
         )
 
+
 rule get_genotype:
     input:
         ref = f"{OUTDIR}/ref.mtx",
         alt = f"{OUTDIR}/alt.mtx",
         vcf = f"{OUTDIR}/variants.vcf.gz",
-        cluster=f"{OUTDIR}/clusters.tsv",
+        cluster=f"{OUTDIR}/clusters.final.tsv",
         consensus=f"{SNAKEDIR}/consensus.py",
         stan=f"{SNAKEDIR}/stan_consensus.pickle"
     output:

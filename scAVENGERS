@@ -5,21 +5,38 @@ import sys
 import subprocess
 
 root_path = os.path.dirname(os.path.abspath(__file__))
+try:
+    if sys.argv[1] == "pipeline":
+        subprocess.run(
+            ["snakemake", "-s", f"{root_path}/Snakefile", "--use-conda"] + sys.argv[2:],
+            check=True,
+            stdout=sys.stdout,
+            stderr=sys.stderr,
+        )
 
-if sys.argv[1] == "pipeline":
-    subprocess.run(["snakemake", "-s", f"{root_path}/Snakefile", "--use-conda"] + sys.argv[2:], check=True, stdout=sys.stdout, stderr=sys.stderr)
+    elif sys.argv[1] == "cluster":
+        subprocess.run(
+            [f"{root_path}/scripts/cluster.py"] + sys.argv[2:], check=True, stdout=sys.stdout, stderr=sys.stderr
+        )
 
-elif sys.argv[1] == "cluster":
-    subprocess.run([f"{root_path}/scripts/cluster.py"] + sys.argv[2:], check=True, stdout=sys.stdout, stderr=sys.stderr)
+    elif sys.argv[1] == "assign":
+        subprocess.run(
+            [f"{root_path}/scripts/assign_donor.py"] + sys.argv[2:], check=True, stdout=sys.stdout, stderr=sys.stderr
+        )
 
-elif sys.argv[1] == "help":
-    print("Usage: scAVENGERS [pipeline|cluster|help] [options]", file=sys.stderr)
-    print("", file=sys.stderr)
-    print("scAVENGERS pipeline: run the scAVENGERS pipeline", file=sys.stderr)
-    print("SCAVENGERS cluster: run the clustering module of scAVENGERES only", file=sys.stderr)
-    print("scAVENGERS help: print this help message", file=sys.stderr)
-    print("", file=sys.stderr)
-    print("For more information, see the documentation.", file=sys.stderr)
+    elif sys.argv[1] == "help":
+        print("Usage: scAVENGERS [pipeline|cluster|help] [options]", file=sys.stderr)
+        print("", file=sys.stderr)
+        print("scAVENGERS pipeline: run the scAVENGERS pipeline", file=sys.stderr)
+        print("SCAVENGERS cluster: run the clustering module of scAVENGERS only", file=sys.stderr)
+        print("scAVENGERS assign: assign donor to each cluster", file=sys.stderr)
+        print("scAVENGERS help: print this help message", file=sys.stderr)
+        print("", file=sys.stderr)
+        print("For more information, see the documentation.", file=sys.stderr)
+        print("https://scavengers.readthedocs.io", file=sys.stderr)
 
-else:
-    print("Unknown command. Use 'scAVENGERS help' for more information.", file=sys.stderr)
+    else:
+        print("Unknown command. Use 'scAVENGERS help' for more information.", file=sys.stderr)
+
+except subprocess.CalledProcessError:
+    pass

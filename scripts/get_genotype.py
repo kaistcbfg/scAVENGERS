@@ -10,9 +10,6 @@ if snakemake.params.ploidy in (1, 2):
     )
 else:
     with open(snakemake.output.amb_rna, "w") as f:
-        f.write(
-            "Genotype inference inavailable because the ploidy number "
-            "is not supported."
-        )
+        f.write("Genotype inference inavailable because the ploidy number " "is not supported.")
     with open(snakemake.output.vcf, "w") as f:
         f.write()

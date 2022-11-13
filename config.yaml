@@ -8,7 +8,7 @@ DATA:
   # path to directory for saving output files
   out_dir:
     outdir
-  # path to genome sequence file. SHOULD NOT be compressed.
+  # path to genome sequence file
   genome:
     genome.fa
   # path to alignment file
