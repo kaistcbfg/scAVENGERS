@@ -16,13 +16,18 @@ cat clusters.tsv | LC_ALL=C grep -F -f $SINGLET_BARCODES > clusters.final.tsv
 $TROUBLET_DIR/troublet -r ref.mtx -a alt.mtx --clusters clusters.tsv > clusters.final.tsv
 ```
 ## Results
+### Output files
 Under the designated output directory, the three files are generated.
 |name|description|
 |---|---|
 |clusters.tsv|cluster result file|
 |gt_matrix.npz|donor-variant matrix of alternative allele counts|
 |variant_index.npz|indices of variants used for demultiplexing|
+### Structure of cluster result file
 The cluster result file `clusters.tsv` contains barcodes, assigned cluster, and likelihood for each cluster in each column.
+- The first column contains barcode sequences.
+- The second column contains cluster assignment results.
+- From the third column, log likelihoods are written.
 ## Parameters
 ```
 scAVENGERS/scAVENGERS cluster --help
