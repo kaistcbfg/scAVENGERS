@@ -2,8 +2,8 @@
 ## Installation
 The required softwares and packages are provided as a conda environment. Conda (https://www.anaconda.com/products/distribution) helps users to manage multiple packages easily. Running below will clone scAVENGERS repository create an environment named 'scavengers.'
 ```
-wget https://github.com/kaistcbfg/scAVENGERS/archive/refs/tags/v0.1.0.tar.gz
-tar -xvzf v0.1.0.tar.gz
+wget https://github.com/kaistcbfg/scAVENGERS/archive/refs/tags/v0.2.0.tar.gz
+tar -xvzf v0.2.0.tar.gz
 conda env create -f scAVENGERS/envs/environment.yaml
 ```
 ## Requirements
