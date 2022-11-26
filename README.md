@@ -8,11 +8,10 @@ scAVENGERS demultiplexes snATAC-seq data by genotype, referring to the variant i
 ### 1. Installation
 The command below clones the repository and install dependencies.
 ```
-wget https://github.com/kaistcbfg/scAVENGERS/archive/refs/tags/v0.1.0.tar.gz
-tar -xvzf v0.1.0.tar.gz
+wget https://github.com/kaistcbfg/scAVENGERS/archive/refs/tags/v0.2.0.tar.gz
+tar -xvzf v0.2.0.tar.gz
 conda env create -f scAVENGERS/envs/environment.yml
 ```
-
 ### 2. Setting parameters for scAVENGERS pipeline
 Via config file in yaml format, you can set parameters for the execution of pipeline. The parameters include path of the input and output data and settings for each program in the pipeline. The format is provided in `config.yaml`. 
 
@@ -20,7 +19,7 @@ Via config file in yaml format, you can set parameters for the execution of pipe
 The below is a command to run whole pipeline for demultiplexing. scAVENGERS require an indexed alignment file, an indexed reference genome file and a line-seperated list of barcode sequences in a text file.
 ```
 conda activate scavengers
-scAVENGERS pipeline --configfile config.yaml -j $THREADS
+$scAVENGERS_directory/scAVENGERS pipeline --configfile config.yaml -j $THREADS
 ```
 
 ### 4. Accessing the result
