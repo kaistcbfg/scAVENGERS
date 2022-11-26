@@ -36,6 +36,3 @@ vartrix \
 --scoring-method coverage \
 --out-matrix {output.alt} --ref-matrix {output.ref} 
 ```
-
-### Configuring
-You can set options from the command when you run scAVENGERS cluster.
