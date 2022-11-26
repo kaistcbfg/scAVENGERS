@@ -50,6 +50,7 @@ scAVENGERS provides some modules to aid demultiplexing single cell DNA sequencin
 
    scavengers_modules/scAVENGERS_pipeline.md
    scavengers_modules/scAVENGERS_cluster.md
+   scavengers_modules/scAVENGERS_assign.md
 
 .. toctree::
    :caption: Tutorial
