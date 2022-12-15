@@ -1,5 +1,6 @@
 # scAVENGERS
 [![Documentation Status](https://readthedocs.org/projects/scavengers/badge/?version=latest)](https://scavengers.readthedocs.io/en/latest/?badge=latest)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7408717.svg)](https://doi.org/10.5281/zenodo.7408717)
 
 ## Overview
 scAVENGERS demultiplexes snATAC-seq data by genotype, referring to the variant information.
