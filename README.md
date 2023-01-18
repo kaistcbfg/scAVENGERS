@@ -46,5 +46,8 @@ Then, you can run the whole pipeline by running below:
 ```
 $scAVENGERS_directory/scAVENGERS pipeline -j 10 --configfile config.yaml
 ```
+## Citation
+Seungbeom Han, Kyukwang Kim, Seongwan Park, Andrew J Lee, Hyonho Chun, Inkyung Jung, scAVENGERS: a genotype-based deconvolution of individuals in multiplexed single-cell ATAC-seq data without reference genotypes, NAR Genomics and Bioinformatics, Volume 4, Issue 4, December 2022, lqac095, https://doi.org/10.1093/nargab/lqac095
+
 ## Documentation
 For further information, please refer to the documentation at https://scavengers.readthedocs.io/en/latest/.
